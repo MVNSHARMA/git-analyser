@@ -32,3 +32,7 @@ coverage/
 
 # Docker volumes (local)
 pgdata/
+
+# Backup files
+*.backup
+

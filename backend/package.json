@@ -5,11 +5,11 @@
   "main": "src/server.ts",
   "scripts": {
     "dev": "node -r dotenv/config dist/server.js",
-    "build": "tsc --skipLibCheck --noUnusedLocals false",
-    "start": "node dist/server.js",
+    "build": "tsc --project tsconfig.dev.json --outDir dist",
+    "start": "node -r dotenv/config dist/server.js",
     "migrate": "ts-node src/config/migrate.ts",
     "seed": "ts-node src/seed.ts",
-    "worker": "ts-node src/jobs/queue-worker.ts",
+    "worker": "node -r dotenv/config dist/jobs/queue-worker.js",
     "test": "jest --runInBand --forceExit",
     "test:watch": "jest --watch",
     "lint": "eslint src --ext .ts"
