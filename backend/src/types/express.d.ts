@@ -1,0 +1,15 @@
+export {};
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: {
+        userId: string;
+        email: string;
+        role: string;
+        sessionId: string;
+      };
+      resource?: Record<string, unknown>;
+    }
+  }
+}
