@@ -18,7 +18,7 @@ async function start(): Promise<void> {
   // Attach real-time WS connection handler
   attachWebSocketServer(server);
 
-  server.listen(PORT, () => {
+  server.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 Git Analyser API running on http://localhost:${PORT}`);
     console.log(`   Health: http://localhost:${PORT}/api/v1/health`);
     console.log(`   Env:    ${process.env.NODE_ENV || 'development'}`);
