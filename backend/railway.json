@@ -4,9 +4,9 @@
     "builder": "RAILPACK"
   },
   "deploy": {
-    "startCommand": "node -r dotenv/config dist/server.js",
+    "startCommand": "npm run build && node dist/server.js",
     "healthcheckPath": "/api/v1/health",
-    "healthcheckTimeout": 60,
+    "healthcheckTimeout": 120,
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 3
   }
