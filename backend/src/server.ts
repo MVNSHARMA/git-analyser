@@ -5,7 +5,7 @@ import { testConnection as testDb } from './config/db';
 import { testConnection as testRedis } from './config/redis';
 import { attachWebSocketServer } from './websocket/ws-server';
 
-const PORT = parseInt(process.env.API_PORT || '4000', 10);
+const PORT = parseInt(process.env.PORT || process.env.API_PORT || '4000', 10);
 
 async function start(): Promise<void> {
   // Verify all service connections before accepting traffic
