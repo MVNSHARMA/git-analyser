@@ -9,7 +9,7 @@ export function useIndexingProgress() {
   const { accessToken } = useAuthStore();
   const { updateIndexingStatus } = useRepoStore();
   const wsRef = useRef<WebSocket | null>(null);
-  const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const retryCountRef = useRef(0);
 
   useEffect(() => {
