@@ -18,10 +18,10 @@ const COOKIE_NAME = 'refresh_token';
 
 const getCookieOptions = () => ({
   httpOnly: true,
-  secure: process.env.NODE_ENV === 'production',
-  sameSite: 'strict' as const,
+  secure: true,
+  sameSite: (process.env.NODE_ENV === 'production' ? 'none' : 'strict') as const,
   maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-  path: '/api/v1/auth',
+  path: '/',
 });
 
 /**
@@ -161,10 +161,10 @@ export async function refresh(req: Request, res: Response, next: NextFunction): 
   } catch (err) {
     // Clear cookie if token is invalid to avoid infinite loops on client
     res.clearCookie(COOKIE_NAME, {
-      path: '/api/v1/auth',
+      path: '/',
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      secure: true,
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
     });
     next(err);
   }
@@ -181,10 +181,10 @@ export async function logout(req: Request, res: Response, next: NextFunction): P
     }
     
     res.clearCookie(COOKIE_NAME, {
-      path: '/api/v1/auth',
+      path: '/',
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      secure: true,
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
     });
     
     res.status(200).json({
