@@ -16,13 +16,20 @@ import { AuthError } from '../../errors';
 
 const COOKIE_NAME = 'refresh_token';
 
-const getCookieOptions = () => ({
-  httpOnly: true,
+const cookieOptions = {
+  httpOnly: true as const,
   secure: true,
-  sameSite: (process.env.NODE_ENV === 'production' ? 'none' : 'strict') as const,
-  maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+  sameSite: (process.env.NODE_ENV === 'production' ? 'none' : 'strict') as 'none' | 'strict',
+  maxAge: 30 * 24 * 60 * 60 * 1000,
   path: '/',
-});
+};
+
+const clearCookieOptions = {
+  httpOnly: true as const,
+  secure: true,
+  sameSite: (process.env.NODE_ENV === 'production' ? 'none' : 'strict') as 'none' | 'strict',
+  path: '/',
+};
 
 /**
  * Handle user registration.
@@ -68,7 +75,7 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
     const { email, password } = req.body;
     const { accessToken, refreshToken, user } = await loginWithEmail({ email, password });
     
-    res.cookie(COOKIE_NAME, refreshToken, getCookieOptions());
+    res.cookie(COOKIE_NAME, refreshToken, cookieOptions);
     res.status(200).json({
       accessToken,
       user,
@@ -132,7 +139,7 @@ export async function githubCallback(req: Request, res: Response, next: NextFunc
 
     const { refreshToken } = await handleGithubOAuth(code);
     
-    res.cookie(COOKIE_NAME, refreshToken, getCookieOptions());
+    res.cookie(COOKIE_NAME, refreshToken, cookieOptions);
     
     const appUrl = process.env.APP_URL || 'http://localhost:3000';
     res.redirect(`${appUrl}/dashboard`);
@@ -154,18 +161,13 @@ export async function refresh(req: Request, res: Response, next: NextFunction): 
     
     const { accessToken, refreshToken: newRefreshToken } = await refreshSession(oldRefreshToken);
     
-    res.cookie(COOKIE_NAME, newRefreshToken, getCookieOptions());
+    res.cookie(COOKIE_NAME, newRefreshToken, cookieOptions);
     res.status(200).json({
       accessToken,
     });
   } catch (err) {
     // Clear cookie if token is invalid to avoid infinite loops on client
-    res.clearCookie(COOKIE_NAME, {
-      path: '/',
-      httpOnly: true,
-      secure: true,
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
-    });
+    res.clearCookie(COOKIE_NAME, clearCookieOptions);
     next(err);
   }
 }
@@ -180,12 +182,7 @@ export async function logout(req: Request, res: Response, next: NextFunction): P
       await revokeSession(refreshToken);
     }
     
-    res.clearCookie(COOKIE_NAME, {
-      path: '/',
-      httpOnly: true,
-      secure: true,
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
-    });
+    res.clearCookie(COOKIE_NAME, clearCookieOptions);
     
     res.status(200).json({
       message: 'Logged out',
@@ -229,7 +226,7 @@ export async function resetPasswordHandler(req: Request, res: Response, next: Ne
     // Auto-login: Issue new session
     const { accessToken, refreshToken } = await createSession(user.id);
     
-    res.cookie(COOKIE_NAME, refreshToken, getCookieOptions());
+    res.cookie(COOKIE_NAME, refreshToken, cookieOptions);
     res.status(200).json({
       accessToken,
       user,
