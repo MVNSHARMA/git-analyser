@@ -23,7 +23,12 @@ export function createApp(): Application {
 
   app.use(
     cors({
-      origin: process.env.APP_URL || 'http://localhost:3000',
+      origin: [
+        'http://localhost:3000',
+        'http://localhost:3001', 
+        'https://git-analyser-seven.vercel.app',
+        process.env.APP_URL || 'https://git-analyser-seven.vercel.app',
+      ],
       credentials: true,
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
       allowedHeaders: ['Content-Type', 'Authorization'],
