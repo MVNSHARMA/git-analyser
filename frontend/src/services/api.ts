@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useAuthStore } from '../stores/authStore';
+import { getInMemoryRefreshToken, setInMemoryRefreshToken } from './auth.service';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
 
@@ -61,14 +62,18 @@ apiClient.interceptors.response.use(
 
       try {
         // Hit refresh endpoint directly to avoid circular dependency
+        const currentRefreshToken = getInMemoryRefreshToken();
         const refreshResponse = await axios.post(
           `${BASE_URL}/api/v1/auth/refresh`,
-          {},
+          currentRefreshToken ? { refreshToken: currentRefreshToken } : {},
           { withCredentials: true }
         );
 
-        const { accessToken, user } = refreshResponse.data;
-        useAuthStore.getState().setAuth(user, accessToken);
+        const { accessToken, user, refreshToken: newRefreshToken } = refreshResponse.data;
+        if (newRefreshToken) {
+          setInMemoryRefreshToken(newRefreshToken);
+        }
+        useAuthStore.getState().setAuth(user, accessToken, newRefreshToken);
 
         // Update Authorization header and resolve queue
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;

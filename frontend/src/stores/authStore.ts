@@ -14,29 +14,37 @@ export interface User {
 interface AuthState {
   user: User | null;
   accessToken: string | null;
+  refreshToken: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  setAuth: (user: User, accessToken: string) => void;
+  setAuth: (user: User, accessToken: string, refreshToken?: string | null) => void;
   clearAuth: () => void;
   setLoading: (isLoading: boolean) => void;
 }
 
+// Extract initial refresh token from URL if redirected (e.g. from GitHub login callback in production)
+const urlParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
+const initialRefreshToken = urlParams.get('refreshToken');
+
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   accessToken: null,
+  refreshToken: initialRefreshToken,
   isAuthenticated: false,
   isLoading: true, // starts loading to allow silent token refresh checks
-  setAuth: (user, accessToken) =>
-    set({
+  setAuth: (user, accessToken, refreshToken = null) =>
+    set((state) => ({
       user,
       accessToken,
+      refreshToken: refreshToken || state.refreshToken || initialRefreshToken,
       isAuthenticated: true,
       isLoading: false,
-    }),
+    })),
   clearAuth: () =>
     set({
       user: null,
       accessToken: null,
+      refreshToken: null,
       isAuthenticated: false,
       isLoading: false,
     }),

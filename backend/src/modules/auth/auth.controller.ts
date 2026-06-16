@@ -78,6 +78,7 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
     res.cookie(COOKIE_NAME, refreshToken, cookieOptions);
     res.status(200).json({
       accessToken,
+      refreshToken: process.env.NODE_ENV === 'production' ? refreshToken : undefined,
       user,
     });
   } catch (err) {
@@ -142,7 +143,11 @@ export async function githubCallback(req: Request, res: Response, next: NextFunc
     res.cookie(COOKIE_NAME, refreshToken, cookieOptions);
     
     const appUrl = process.env.APP_URL || 'http://localhost:3000';
-    res.redirect(`${appUrl}/dashboard`);
+    if (process.env.NODE_ENV === 'production') {
+      res.redirect(`${appUrl}/dashboard?refreshToken=${refreshToken}`);
+    } else {
+      res.redirect(`${appUrl}/dashboard`);
+    }
   } catch (err) {
     next(err);
   }
@@ -154,16 +159,18 @@ export async function githubCallback(req: Request, res: Response, next: NextFunc
  */
 export async function refresh(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    const oldRefreshToken = req.cookies[COOKIE_NAME];
+    const oldRefreshToken = req.cookies[COOKIE_NAME] || req.body.refreshToken;
     if (!oldRefreshToken) {
       throw new AuthError('TOKEN_INVALID', 'No refresh token provided');
     }
     
-    const { accessToken, refreshToken: newRefreshToken } = await refreshSession(oldRefreshToken);
+    const { accessToken, refreshToken: newRefreshToken, user } = await refreshSession(oldRefreshToken);
     
     res.cookie(COOKIE_NAME, newRefreshToken, cookieOptions);
     res.status(200).json({
       accessToken,
+      refreshToken: process.env.NODE_ENV === 'production' ? newRefreshToken : undefined,
+      user,
     });
   } catch (err) {
     // Clear cookie if token is invalid to avoid infinite loops on client
@@ -229,6 +236,7 @@ export async function resetPasswordHandler(req: Request, res: Response, next: Ne
     res.cookie(COOKIE_NAME, refreshToken, cookieOptions);
     res.status(200).json({
       accessToken,
+      refreshToken: process.env.NODE_ENV === 'production' ? refreshToken : undefined,
       user,
     });
   } catch (err) {

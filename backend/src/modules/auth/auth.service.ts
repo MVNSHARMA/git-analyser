@@ -221,9 +221,22 @@ export async function refreshSession(rawRefreshToken: string): Promise<{ accessT
 
     const newAccessToken = signAccessToken({ userId, email, role, sessionId });
 
+    const userProfileResult = await client.query(
+      'SELECT display_name, avatar_url FROM users WHERE id = $1',
+      [userId]
+    );
+    const userProfile = userProfileResult.rows[0] as { display_name: string; avatar_url: string | null };
+
     return {
       accessToken: newAccessToken,
       refreshToken: newRawRefreshToken,
+      user: {
+        id: userId,
+        email,
+        displayName: userProfile.display_name,
+        role,
+        avatarUrl: userProfile.avatar_url,
+      },
     };
   });
 }
