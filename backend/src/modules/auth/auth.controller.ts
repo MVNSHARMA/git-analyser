@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import crypto from 'crypto';
+import jwt from 'jsonwebtoken';
+import { query } from '../../config/db';
 import {
   registerWithEmail,
   verifyEmail,
@@ -159,21 +161,39 @@ export async function githubCallback(req: Request, res: Response, next: NextFunc
  */
 export async function refresh(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    const oldRefreshToken = req.cookies[COOKIE_NAME] || req.body.refreshToken;
-    if (!oldRefreshToken) {
-      throw new AuthError('TOKEN_INVALID', 'No refresh token provided');
+    const rawRefreshToken = req.cookies?.refresh_token || req.body?.refreshToken;
+    if (!rawRefreshToken) {
+      res.status(401).json({ error: 'No refresh token provided', code: 'NO_REFRESH_TOKEN' });
+      return;
     }
+    const result = await refreshSession(rawRefreshToken);
     
-    const { accessToken, refreshToken: newRefreshToken, user } = await refreshSession(oldRefreshToken);
+    // Decode access token to get user ID
+    const decoded = jwt.decode(result.accessToken) as { userId: string } | null;
+    let user = undefined;
+    if (decoded?.userId) {
+      const userResult = await query(
+        'SELECT id, email, display_name as "displayName", role, avatar_url as "avatarUrl" FROM users WHERE id = $1',
+        [decoded.userId]
+      );
+      user = userResult.rows[0];
+    }
+
+    const cookieOptions = {
+      httpOnly: true as const,
+      secure: true,
+      sameSite: (process.env.NODE_ENV === 'production' ? 'none' : 'strict') as 'none' | 'strict',
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      path: '/',
+    };
     
-    res.cookie(COOKIE_NAME, newRefreshToken, cookieOptions);
-    res.status(200).json({
-      accessToken,
-      refreshToken: process.env.NODE_ENV === 'production' ? newRefreshToken : undefined,
+    res.cookie('refresh_token', result.refreshToken, cookieOptions);
+    res.json({ 
+      accessToken: result.accessToken,
+      refreshToken: process.env.NODE_ENV === 'production' ? result.refreshToken : undefined,
       user,
     });
   } catch (err) {
-    // Clear cookie if token is invalid to avoid infinite loops on client
     res.clearCookie(COOKIE_NAME, clearCookieOptions);
     next(err);
   }
