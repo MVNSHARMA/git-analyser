@@ -48,8 +48,8 @@ export async function registerWithEmail({
   return withTransaction(async (client) => {
     // 1. Insert user
     const userResult = await client.query(`
-      INSERT INTO users (email, password_hash, display_name, role)
-      VALUES ($1, $2, $3, 'user')
+      INSERT INTO users (email, password_hash, display_name, role, email_verified)
+      VALUES ($1, $2, $3, 'user', true)
       RETURNING id
     `, [email, hashedPassword, displayName]);
     const userId = userResult.rows[0].id as string;
@@ -120,9 +120,9 @@ export async function loginWithEmail({ email, password }: Record<string, string>
   };
 
   // Check if account is verified
-  if (!user.email_verified) {
-    throw new ForbiddenError('Email not verified', 'EMAIL_NOT_VERIFIED');
-  }
+  // if (!user.email_verified) {
+  //   throw new ForbiddenError('Email not verified', 'EMAIL_NOT_VERIFIED');
+  // }
 
   // Handle users created via GitHub OAuth without a password hash
   if (!user.password_hash) {
