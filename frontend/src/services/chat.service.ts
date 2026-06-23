@@ -1,7 +1,11 @@
 import apiClient from './api';
 import { useAuthStore } from '../stores/authStore';
+import { refreshToken } from './auth.service';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || 
+  (typeof window !== 'undefined' && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1')
+    ? 'https://git-analyser-production.up.railway.app'
+    : 'http://localhost:4000');
 
 export interface ChatMessage {
   id: string;
@@ -53,10 +57,10 @@ export const chatService = {
     onDone: () => void,
     onError: (err: any) => void
   ): Promise<void> {
-    const token = useAuthStore.getState().accessToken;
+    let token = useAuthStore.getState().accessToken;
 
     try {
-      const response = await fetch(`${BASE_URL}/api/v1/chat/conversations/${conversationId}/chat`, {
+      let response = await fetch(`${BASE_URL}/api/v1/chat/conversations/${conversationId}/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -64,6 +68,27 @@ export const chatService = {
         },
         body: JSON.stringify({ message }),
       });
+
+      if (response.status === 401) {
+        try {
+          const refreshRes = await refreshToken();
+          const { accessToken, user, refreshToken: newRefreshToken } = refreshRes.data;
+          useAuthStore.getState().setAuth(user, accessToken, newRefreshToken);
+          token = accessToken;
+
+          response = await fetch(`${BASE_URL}/api/v1/chat/conversations/${conversationId}/chat`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ message }),
+          });
+        } catch (refreshErr) {
+          useAuthStore.getState().clearAuth();
+          throw new Error('Session expired, please log in again.');
+        }
+      }
 
       if (!response.ok) {
         throw new Error(`Chat request failed: ${response.statusText}`);

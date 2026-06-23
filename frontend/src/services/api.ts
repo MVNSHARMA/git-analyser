@@ -2,7 +2,10 @@ import axios from 'axios';
 import { useAuthStore } from '../stores/authStore';
 import { getInMemoryRefreshToken, setInMemoryRefreshToken } from './auth.service';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || 
+  (typeof window !== 'undefined' && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1')
+    ? 'https://git-analyser-production.up.railway.app'
+    : '');
 
 export const apiClient = axios.create({
   baseURL: `${BASE_URL}/api/v1`,
@@ -42,14 +45,15 @@ const processQueue = (error: any, token: string | null = null) => {
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
-    const isAuthRequest = originalRequest.url?.includes('/auth/login') ||
-                          originalRequest.url?.includes('/auth/register') ||
-                          originalRequest.url?.includes('/auth/forgot-password') ||
-                          originalRequest.url?.includes('/auth/reset-password') ||
-                          originalRequest.url?.includes('/auth/refresh');
+    const originalRequest = error.config;
+    const isAuthRequest = originalRequest?.url?.includes('/auth/login') ||
+                          originalRequest?.url?.includes('/auth/register') ||
+                          originalRequest?.url?.includes('/auth/forgot-password') ||
+                          originalRequest?.url?.includes('/auth/reset-password') ||
+                          originalRequest?.url?.includes('/auth/refresh');
 
     // Check if error is 401 and it's not a retry already and not an auth endpoint
-    if (error.response?.status === 401 && !originalRequest._retry && !isAuthRequest) {
+    if (error.response?.status === 401 && originalRequest && !originalRequest._retry && !isAuthRequest) {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });

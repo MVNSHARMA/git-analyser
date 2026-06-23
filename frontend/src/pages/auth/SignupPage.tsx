@@ -6,7 +6,10 @@ import authService from '../../services/auth.service';
 import Input from '../../components/shared/Input';
 import Button from '../../components/shared/Button';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || 
+  (typeof window !== 'undefined' && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1')
+    ? 'https://git-analyser-production.up.railway.app'
+    : 'http://localhost:4000');
 
 export function SignupPage() {
   const [displayName, setDisplayName] = useState('');
