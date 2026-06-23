@@ -6,7 +6,7 @@
 
 ## What It Does
 
-Git Analyser indexes any GitHub repository and lets you ask natural language questions about commits, contributors, branches, and merge conflicts — powered by Claude AI.
+Git Analyser indexes any GitHub repository and lets you ask natural language questions about commits, contributors, branches, and merge conflicts — powered by Groq (Llama 3.1) and Voyage AI.
 
 ---
 
@@ -16,7 +16,7 @@ Git Analyser indexes any GitHub repository and lets you ask natural language que
 |---|---|
 | Frontend | React 18 + TypeScript + Vite + Tailwind CSS |
 | Backend | Node.js + Express + TypeScript |
-| AI / LLM | Anthropic Claude API |
+| AI / LLM | Groq (Llama 3.1) & Voyage AI |
 | Vector DB | Pinecone |
 | Relational DB | PostgreSQL 15 |
 | Cache / Queue | Redis 7 |
@@ -30,7 +30,8 @@ Git Analyser indexes any GitHub repository and lets you ask natural language que
 - Docker & Docker Compose
 - Node.js 20+
 - A GitHub OAuth App ([create one here](https://github.com/settings/developers))
-- Anthropic API key
+- Groq API key (`GROQ_API_KEY`)
+- Voyage AI API key (`VOYAGE_API_KEY`)
 - Pinecone account + index
 
 ### 1. Clone and configure
@@ -78,12 +79,12 @@ open http://localhost:3000
 | Phase | Status | Description |
 |---|---|---|
 | 1 — Foundation | ✅ Complete | Docker, folder structure, env config |
-| 2 — Database | 🔜 Next | PostgreSQL migrations + Redis |
-| 3 — Auth | ⏳ Pending | GitHub OAuth + JWT sessions |
-| 4 — Indexing | ⏳ Pending | GitHub API + 7-stage pipeline |
-| 5 — AI Chat | ⏳ Pending | Vector search + Claude streaming |
-| 6 — REST API | ⏳ Pending | All remaining endpoints |
-| 7 — Frontend | ⏳ Pending | All pages and components |
+| 2 — Database | ✅ Complete | PostgreSQL migrations + Redis |
+| 3 — Auth | ✅ Complete | GitHub OAuth + JWT sessions |
+| 4 — Indexing | ✅ Complete | GitHub API + 7-stage pipeline |
+| 5 — AI Chat | ✅ Complete | Vector search + Groq streaming |
+| 6 — REST API | ✅ Complete | All remaining endpoints |
+| 7 — Frontend | ✅ Complete | All pages and components |
 
 ---
 
@@ -117,7 +118,7 @@ git-analyser/
 
 ## Security Notes
 
-- GitHub OAuth tokens are **AES-256 encrypted** before storing in DB
-- Refresh tokens stored as **HttpOnly cookies** — not accessible via JavaScript
-- Access tokens live **in memory only** — never localStorage
-- All SQL queries use **parameterised statements** — zero string concatenation
+- GitHub OAuth tokens are **AES-256 encrypted** before storing in DB.
+- Refresh tokens are stored in the browser's **localStorage** (via key `rt`) and passed inside the request bodies, with **HttpOnly cookies** fallback to support production cross-domain compatibility (Vercel frontend and Railway backend).
+- Access tokens live **in memory only** (Zustand state store) — never localStorage or cookies.
+- All SQL queries use **parameterised statements** — zero string concatenation.
