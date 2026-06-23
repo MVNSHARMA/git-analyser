@@ -1,13 +1,25 @@
 import apiClient from './api';
 
-let _refreshToken: string | null = null;
-export function setStoredRefreshToken(token: string) { _refreshToken = token; }
-export function getStoredRefreshToken(): string | null { return _refreshToken; }
+export function setStoredRefreshToken(token: string) {
+  localStorage.setItem('rt', token);
+}
+
+export function getStoredRefreshToken(): string | null {
+  return localStorage.getItem('rt');
+}
+
+export async function refreshToken() {
+  const rt = localStorage.getItem('rt');
+  return apiClient.post('/auth/refresh', { refreshToken: rt });
+}
 
 // Extract initial refresh token from URL if redirected (e.g. from GitHub login callback in production)
 const urlParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
 if (urlParams.has('refreshToken')) {
-  _refreshToken = urlParams.get('refreshToken');
+  const token = urlParams.get('refreshToken');
+  if (token) {
+    localStorage.setItem('rt', token);
+  }
 }
 
 // Clear the query parameter from the URL address bar immediately to keep it clean
@@ -20,9 +32,8 @@ export const authService = {
   async login(email: string, password: string) {
     const response = await apiClient.post('/auth/login', { email, password });
     const data = response.data;
-    // store refresh token in memory
     if (data.refreshToken) {
-      setStoredRefreshToken(data.refreshToken);
+      localStorage.setItem('rt', data.refreshToken);
     }
     return data;
   },
@@ -33,14 +44,12 @@ export const authService = {
   },
 
   async logout() {
-    _refreshToken = null;
+    localStorage.removeItem('rt');
     const res = await apiClient.post('/auth/logout');
     return res.data;
   },
 
-  async refreshToken() {
-    return apiClient.post('/auth/refresh', { refreshToken: getStoredRefreshToken() });
-  },
+  refreshToken,
 
   async forgotPassword(email: string) {
     const res = await apiClient.post('/auth/forgot-password', { email });
@@ -50,7 +59,7 @@ export const authService = {
   async resetPassword(token: string, passwordSecret: string) {
     const res = await apiClient.post('/auth/reset-password', { token, passwordSecret });
     if (res.data?.refreshToken) {
-      setStoredRefreshToken(res.data.refreshToken);
+      localStorage.setItem('rt', res.data.refreshToken);
     }
     return res.data;
   },
@@ -63,11 +72,15 @@ export const authService = {
 
 // Export helpers for api client/interceptor to prevent circular dependencies
 export function getInMemoryRefreshToken() {
-  return _refreshToken;
+  return localStorage.getItem('rt');
 }
 
 export function setInMemoryRefreshToken(token: string | null) {
-  _refreshToken = token;
+  if (token) {
+    localStorage.setItem('rt', token);
+  } else {
+    localStorage.removeItem('rt');
+  }
 }
 
 export default authService;

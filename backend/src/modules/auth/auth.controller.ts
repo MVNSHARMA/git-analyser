@@ -75,14 +75,10 @@ export async function verifyEmailHandler(req: Request, res: Response, next: Next
 export async function login(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const { email, password } = req.body;
-    const { accessToken, refreshToken, user } = await loginWithEmail({ email, password });
+    const result = await loginWithEmail({ email, password });
     
-    res.cookie(COOKIE_NAME, refreshToken, cookieOptions);
-    res.status(200).json({
-      accessToken,
-      refreshToken,
-      user,
-    });
+    res.cookie(COOKIE_NAME, result.refreshToken, cookieOptions);
+    res.json({ accessToken: result.accessToken, refreshToken: result.refreshToken, user: result.user });
   } catch (err) {
     next(err);
   }
@@ -144,8 +140,8 @@ export async function githubCallback(req: Request, res: Response, next: NextFunc
     
     res.cookie(COOKIE_NAME, refreshToken, cookieOptions);
     
-    const appUrl = process.env.APP_URL || 'http://localhost:3000';
-    res.redirect(`${appUrl}/auth/callback?accessToken=${accessToken}&refreshToken=${refreshToken}&userId=${user.id}`);
+    const redirectUrl = `${process.env.APP_URL}/auth/callback?accessToken=${accessToken}&refreshToken=${refreshToken}`;
+    res.redirect(redirectUrl);
   } catch (err) {
     next(err);
   }
@@ -157,12 +153,12 @@ export async function githubCallback(req: Request, res: Response, next: NextFunc
  */
 export async function refresh(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    const rawRefreshToken = req.cookies?.refresh_token || req.body?.refreshToken;
-    if (!rawRefreshToken) {
+    const rawToken = req.cookies?.refresh_token || req.body?.refreshToken;
+    if (!rawToken) {
       res.status(401).json({ error: 'No refresh token provided', code: 'NO_REFRESH_TOKEN' });
       return;
     }
-    const result = await refreshSession(rawRefreshToken);
+    const result = await refreshSession(rawToken);
     
     // Decode access token to get user ID
     const decoded = jwt.decode(result.accessToken) as { userId: string } | null;

@@ -4,6 +4,10 @@ import { publishEvent } from '../../websocket/ws-events';
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+async function updateJobProgress(jobId: string, stage: string, percent: number): Promise<void> {
+  await query('UPDATE indexing_jobs SET stage=$1, progress=$2 WHERE id=$3', [stage, percent, jobId]);
+}
+
 export async function runStage4(
   repoId: string,
   jobId: string,
@@ -14,15 +18,17 @@ export async function runStage4(
   const stage = 'diffs';
   const progress = 65;
 
-  // 1. Fetch top 500 commits by committed_at DESC that do not have diffs stored yet
+  // 1. Fetch top 100 commits by committed_at DESC that do not have diffs stored yet
   const commitRes = await query(`
     SELECT id, sha FROM commits 
     WHERE repository_id = $1 AND diff_stored = false 
     ORDER BY committed_at DESC 
-    LIMIT 500
+    LIMIT 100
   `, [repoId]);
   
   const commits = commitRes.rows as Array<{ id: string; sha: string }>;
+  const totalCommits = commits.length;
+  let processedCount = 0;
 
   for (const commit of commits) {
     // Fetch detailed view (stats + files list) from GitHub
@@ -45,6 +51,12 @@ export async function runStage4(
       SET additions = $1, deletions = $2, files_changed_count = $3, diff_stored = true
       WHERE id = $4
     `, [additions, deletions, filesCount, commit.id]);
+
+    processedCount++;
+    if (processedCount % 10 === 0 && totalCommits > 0) {
+      const progressPercent = 50 + Math.floor((processedCount / totalCommits) * 15);
+      await updateJobProgress(jobId, 'diffs', progressPercent);
+    }
 
     // Throttle if we are close to hitting the GitHub rate limit threshold
     if (client.lastRateLimitRemaining !== undefined && client.lastRateLimitRemaining < 200) {
