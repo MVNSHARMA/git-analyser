@@ -42,10 +42,14 @@ const processQueue = (error: any, token: string | null = null) => {
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
-    const originalRequest = error.config;
+    const isAuthRequest = originalRequest.url?.includes('/auth/login') ||
+                          originalRequest.url?.includes('/auth/register') ||
+                          originalRequest.url?.includes('/auth/forgot-password') ||
+                          originalRequest.url?.includes('/auth/reset-password') ||
+                          originalRequest.url?.includes('/auth/refresh');
 
-    // Check if error is 401 and it's not a retry already
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    // Check if error is 401 and it's not a retry already and not an auth endpoint
+    if (error.response?.status === 401 && !originalRequest._retry && !isAuthRequest) {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
