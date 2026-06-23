@@ -546,7 +546,7 @@ function ChatTab({ repoId }: { repoId: string }) {
         console.error(err);
         setIsStreaming(false);
         setStreamingMessage('');
-        toast.error('AI streaming error occurred. Try again.');
+        toast.error(err.message || 'AI streaming error occurred. Try again.');
       }
     );
   };

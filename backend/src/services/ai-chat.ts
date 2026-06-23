@@ -20,6 +20,10 @@ export async function* streamChatResponse(
   userMessage: string,
   _branchFilter: string | null
 ): AsyncGenerator<string, void, unknown> {
+  if (!process.env.GROQ_API_KEY) {
+    throw new Error('GROQ_API_KEY environment variable is missing on the server. Please configure it in your Railway dashboard.');
+  }
+
   // 1. Search similar commits
   const similarCommits = await searchSimilarCommits(repoId, userMessage, 15);
 
