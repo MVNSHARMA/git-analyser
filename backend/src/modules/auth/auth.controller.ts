@@ -80,7 +80,7 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
     res.cookie(COOKIE_NAME, refreshToken, cookieOptions);
     res.status(200).json({
       accessToken,
-      refreshToken: process.env.NODE_ENV === 'production' ? refreshToken : undefined,
+      refreshToken,
       user,
     });
   } catch (err) {
@@ -140,16 +140,12 @@ export async function githubCallback(req: Request, res: Response, next: NextFunc
       throw new AuthError('TOKEN_INVALID', 'OAuth authorization code is required');
     }
 
-    const { refreshToken } = await handleGithubOAuth(code);
+    const { accessToken, refreshToken, user } = await handleGithubOAuth(code);
     
     res.cookie(COOKIE_NAME, refreshToken, cookieOptions);
     
     const appUrl = process.env.APP_URL || 'http://localhost:3000';
-    if (process.env.NODE_ENV === 'production') {
-      res.redirect(`${appUrl}/dashboard?refreshToken=${refreshToken}`);
-    } else {
-      res.redirect(`${appUrl}/dashboard`);
-    }
+    res.redirect(`${appUrl}/auth/callback?accessToken=${accessToken}&refreshToken=${refreshToken}&userId=${user.id}`);
   } catch (err) {
     next(err);
   }
@@ -190,7 +186,7 @@ export async function refresh(req: Request, res: Response, next: NextFunction): 
     res.cookie('refresh_token', result.refreshToken, cookieOptions);
     res.json({ 
       accessToken: result.accessToken,
-      refreshToken: process.env.NODE_ENV === 'production' ? result.refreshToken : undefined,
+      refreshToken: result.refreshToken,
       user,
     });
   } catch (err) {

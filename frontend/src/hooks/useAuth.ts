@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useAuthStore } from '../stores/authStore';
-import authService from '../services/auth.service';
+import { getStoredRefreshToken, setStoredRefreshToken } from '../services/auth.service';
+import apiClient from '../services/api';
 
 export function useAuth() {
   const { user, accessToken, isAuthenticated, isLoading, setAuth, clearAuth, setLoading } = useAuthStore();
@@ -11,13 +12,25 @@ export function useAuth() {
     async function restoreSession() {
       try {
         setLoading(true);
-        const data = await authService.refreshToken();
+        const refreshToken = getStoredRefreshToken();
+        if (!refreshToken) {
+          clearAuth();
+          setLoading(false);
+          return;
+        }
+        // call refresh with token in body
+        const response = await apiClient.post('/auth/refresh', { refreshToken });
         if (active) {
-          setAuth(data.user, data.accessToken);
+          const data = response.data;
+          if (data.refreshToken) {
+            setStoredRefreshToken(data.refreshToken);
+          }
+          setAuth(data.user, data.accessToken, data.refreshToken);
         }
       } catch (err) {
         if (active) {
           clearAuth();
+          setLoading(false);
         }
       }
     }
