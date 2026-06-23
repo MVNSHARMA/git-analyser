@@ -46,7 +46,17 @@ export function createApp(): Application {
 
   // ─── Health check (no auth required) ─────────────────────────────────────────
   app.get('/api/v1/health', (_req: Request, res: Response) => {
-    res.json({ status: 'ok', timestamp: new Date().toISOString() });
+    res.json({
+      status: 'ok',
+      timestamp: new Date().toISOString(),
+      env: {
+        groqKeyConfigured: !!process.env.GROQ_API_KEY,
+        voyageKeyConfigured: !!process.env.VOYAGE_API_KEY,
+        pineconeKeyConfigured: !!process.env.PINECONE_API_KEY,
+        pineconeIndexConfigured: !!process.env.PINECONE_INDEX,
+        nodeEnv: process.env.NODE_ENV,
+      }
+    });
   });
 
   // ─── API routes ───────────────────────────────────────────────────────────────
