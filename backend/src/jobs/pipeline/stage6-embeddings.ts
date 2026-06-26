@@ -4,6 +4,8 @@ import { VoyageAIClient as VoyageAI } from 'voyageai';
 import { GitHubApiClient } from '../../services/github-api';
 import { publishEvent } from '../../websocket/ws-events';
 
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 export async function runStage6(
   repoId: string,
   jobId: string,
@@ -37,9 +39,9 @@ export async function runStage6(
     const voyageClient = new VoyageAI({ apiKey: process.env.VOYAGE_API_KEY });
     const pineconeIndex = getPineconeIndex();
 
-    // Process in batches of 100
-    for (let i = 0; i < commits.length; i += 100) {
-      const batch = commits.slice(i, i + 100);
+    // Process in groups of 50
+    for (let i = 0; i < commits.length; i += 50) {
+      const batch = commits.slice(i, i + 50);
       
       // Build text payload for embeddings calculation
       const texts = batch.map((c) => {
@@ -78,6 +80,8 @@ export async function runStage6(
         SET vector_id = sha 
         WHERE id = ANY($1)
       `, [batchIds]);
+
+      await sleep(100);
     }
   }
 

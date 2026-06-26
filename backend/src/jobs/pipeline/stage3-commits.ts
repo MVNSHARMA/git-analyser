@@ -30,8 +30,18 @@ export async function runStage3(
     const branch = branches[i];
     let page = 1;
     let hasMore = true;
+    let branchCommits = 0;
 
     while (hasMore) {
+      if (uniqueShas.size >= 200) {
+        hasMore = false;
+        break;
+      }
+      if (branchCommits >= 200) {
+        hasMore = false;
+        break;
+      }
+
       // Fetch commits for this branch from GitHub
       const commits = await client.getCommits(owner, repo, branch.name, page, 100);
       
@@ -41,6 +51,15 @@ export async function runStage3(
       }
 
       for (const ghCommit of commits) {
+        if (uniqueShas.size >= 200) {
+          hasMore = false;
+          break;
+        }
+        if (branchCommits >= 200) {
+          hasMore = false;
+          break;
+        }
+
         const sha = ghCommit.sha;
         const shortSha = sha.substring(0, 7);
         const message = ghCommit.commit.message;
@@ -62,6 +81,7 @@ export async function runStage3(
 
         const commitId = commitInsertResult.rows[0].id;
         uniqueShas.add(sha);
+        branchCommits++;
 
         // Link commit to this branch
         await query(`

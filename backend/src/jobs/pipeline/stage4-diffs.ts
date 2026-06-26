@@ -18,17 +18,17 @@ export async function runStage4(
   const stage = 'diffs';
   const progress = 65;
 
-  // 1. Fetch top 100 commits by committed_at DESC that do not have diffs stored yet
+  // 1. Fetch top 50 commits by committed_at DESC that do not have diffs stored yet
   const commitRes = await query(`
     SELECT id, sha FROM commits 
     WHERE repository_id = $1 AND diff_stored = false 
     ORDER BY committed_at DESC 
-    LIMIT 100
+    LIMIT 50
   `, [repoId]);
   
   const commits = commitRes.rows as Array<{ id: string; sha: string }>;
-  const totalCommits = commits.length;
-  let processedCount = 0;
+  const total = commits.length;
+  let counter = 0;
 
   for (const commit of commits) {
     // Fetch detailed view (stats + files list) from GitHub
@@ -52,10 +52,10 @@ export async function runStage4(
       WHERE id = $4
     `, [additions, deletions, filesCount, commit.id]);
 
-    processedCount++;
-    if (processedCount % 10 === 0 && totalCommits > 0) {
-      const progressPercent = 50 + Math.floor((processedCount / totalCommits) * 15);
-      await updateJobProgress(jobId, 'diffs', progressPercent);
+    counter++;
+    if (counter % 10 === 0) {
+      await query('UPDATE indexing_jobs SET progress=$1, stage=$2 WHERE id=$3', 
+        [50 + Math.floor((counter/total)*15), 'diffs', jobId]);
     }
 
     // Throttle if we are close to hitting the GitHub rate limit threshold
