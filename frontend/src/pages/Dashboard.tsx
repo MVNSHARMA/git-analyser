@@ -57,6 +57,8 @@ export function Dashboard() {
   const { data: fetchedRepos, isLoading: isReposLoading } = useQuery({
     queryKey: ['repos'],
     queryFn: reposService.getRepos,
+    refetchInterval: 5000,
+    refetchIntervalInBackground: false,
   });
 
   const { data: unreadCountRes } = useQuery({
