@@ -36,3 +36,8 @@ pgdata/
 # Backup files
 *.backup
 
+# Security exceptions
+cookies.txt
+backend/cookies.txt
+backend/.env.check
+*.env.check
