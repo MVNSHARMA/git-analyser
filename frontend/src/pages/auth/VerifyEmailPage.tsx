@@ -39,7 +39,7 @@ export function VerifyEmailPage() {
 
   return (
     <div className="min-h-screen bg-canvas-default text-fg-default flex items-center justify-center p-6">
-      <div className="w-full max-w-md bg-canvas-default border border-default rounded-lg shadow-elevation-medium overflow-hidden p-8 text-center animate-fade-in">
+      <div className="w-full max-w-md bg-canvas-default border border-muted rounded-lg shadow-elevation-medium overflow-hidden p-8 text-center animate-fade-in">
         {status === 'loading' && (
           <div className="flex flex-col items-center py-6">
             <Spinner size="lg" className="mb-4" />

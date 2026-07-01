@@ -14,6 +14,11 @@
     --color-fg-muted:   #656d76;
     --color-fg-subtle:  #6e7781;
     --color-fg-on-emphasis: #ffffff;
+    /* Dedicated foreground for accent-emphasis backgrounds specifically — the accent is a
+       light/bright gold in both themes, so it always needs dark text, unlike other emphasis
+       colors (danger/success/neutral) which vary by theme. Keeping this separate from
+       --color-fg-on-emphasis avoids breaking the other (theme-varying) emphasis pairings. */
+    --color-fg-on-accent: #1f2328;
 
     /* Borders */
     --color-border-default: #d0d7de;
@@ -40,12 +45,18 @@
     --color-danger-fg: #d1242f;
     --color-danger-emphasis: #cf222e;
 
-    /* Product accent: warm mustard-gold, hue/saturation-shifted away from the
-       attention/warning yellow above so the two are never confusable. White-on-accent
-       contrast = 4.97:1 (passes WCAG AA). */
-    --color-accent-emphasis: #856e00;
-    --color-accent-emphasis-hover: #665500;
-    --color-accent-subtle: #fbf7e4;
+    /* Product accent: saffron orange, hue ~36 — clearly more orange than the attention/
+       warning gold above (hue 40-44), so the two stay visually distinct while leaning
+       warmer. Paired with dark text (--color-fg-on-accent), not white: darkening a yellow/
+       gold enough to pass AA with white text makes it look muddy/brown, so this uses a
+       lighter, more saturated value with dark text instead (6.78:1 contrast). */
+    --color-accent-emphasis: #E8991F;
+    --color-accent-emphasis-hover: #d48816;
+    --color-accent-subtle: #fdf4e8;
+    /* Accent blended 50% toward canvas — a dimmed focus-ring tone. Tailwind's color-opacity
+       modifiers (e.g. border-accent-emphasis/50) don't work on CSS-variable-based colors, so
+       this is a precomputed solid blend instead of relying on that syntax. */
+    --color-accent-faded: #f4cc8f;
 
     /* Radius */
     --radius-small:  3px;
@@ -60,14 +71,15 @@
   }
 
   [data-theme="dark"] {
-    --color-canvas-default:  #0d1117;
-    --color-canvas-subtle:   #161b22;
+    --color-canvas-default:  #010409;
+    --color-canvas-subtle:   #0d1117;
     --color-canvas-inset:    #010409;
 
     --color-fg-default: #e6edf3;
     --color-fg-muted:   #8b949e;
     --color-fg-subtle:  #6e7681;
     --color-fg-on-emphasis: #ffffff;
+    --color-fg-on-accent: #1f2328;
 
     --color-border-default: #30363d;
     --color-border-muted:   #21262d;
@@ -91,10 +103,13 @@
     --color-danger-fg: #f85149;
     --color-danger-emphasis: #da3633;
 
-    /* Accent brightened for dark-mode legibility; near-black-on-accent contrast = 10.96:1 */
-    --color-accent-emphasis: #f5d63d;
-    --color-accent-emphasis-hover: #fbe36a;
-    --color-accent-subtle: #393418;
+    /* Same hue as the light-mode saffron accent (~36°), brightened for dark-mode legibility
+       so both themes read as the same golden-orange rather than gold (dark) vs orange
+       (light). Dark-text-on-accent contrast = 8.11:1. */
+    --color-accent-emphasis: #f5ab3d;
+    --color-accent-emphasis-hover: #f7c06e;
+    --color-accent-subtle: #493312;
+    --color-accent-faded: #7b5823;
     --color-fg-on-emphasis: #1f2328;
 
     --shadow-small:  0 1px 0 rgba(0, 0, 0, 0.3);
@@ -149,3 +164,4 @@
     box-shadow: var(--shadow-medium);
   }
 }
+

@@ -61,7 +61,7 @@ export function IndexingProgress({ repoId, showDetails = true }: IndexingProgres
       </div>
 
       {/* Progress Bar Container */}
-      <div className="w-full h-1.5 bg-canvas-inset rounded-full overflow-hidden border border-border-default">
+      <div className="w-full h-1.5 bg-canvas-inset rounded-full overflow-hidden border border-muted">
         <div
           className={`h-full transition-all duration-500 ease-out rounded-full ${
             currentStatus === 'failed'

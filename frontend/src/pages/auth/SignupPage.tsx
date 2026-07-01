@@ -70,8 +70,8 @@ export function SignupPage() {
         <div className="absolute top-6 right-6 z-20">
           <ThemeToggle />
         </div>
-        <div className="w-full max-w-md bg-canvas-default border border-default rounded-lg shadow-elevation-medium p-8 z-10 text-center animate-fade-in">
-          <div className="p-4 bg-canvas-subtle border border-default rounded-lg w-fit mx-auto mb-6">
+        <div className="w-full max-w-md bg-canvas-default border border-muted rounded-lg shadow-elevation-medium p-8 z-10 text-center animate-fade-in">
+          <div className="p-4 bg-canvas-subtle border border-muted rounded-lg w-fit mx-auto mb-6">
             <Mail className="w-10 h-10 text-accent-emphasis animate-bounce" />
           </div>
           <h2 className="text-2xl font-semibold">Check Your Email</h2>
@@ -98,10 +98,10 @@ export function SignupPage() {
         <ThemeToggle />
       </div>
 
-      <div className="w-full max-w-md bg-canvas-default border border-default rounded-lg shadow-elevation-medium p-8 z-10 text-fg-default">
+      <div className="w-full max-w-md bg-canvas-default border border-muted rounded-lg shadow-elevation-medium p-8 z-10 text-fg-default">
         {/* Title */}
         <div className="flex flex-col items-center mb-8">
-          <div className="p-3 bg-canvas-subtle border border-default rounded-lg text-accent-emphasis w-fit mb-4">
+          <div className="p-3 bg-canvas-subtle border border-muted rounded-lg text-accent-emphasis w-fit mb-4">
             <Terminal className="w-8 h-8" />
           </div>
           <h2 className="text-3xl font-semibold text-fg-default">Create Account</h2>
@@ -151,7 +151,7 @@ export function SignupPage() {
 
         {/* Separator */}
         <div className="relative flex items-center justify-center my-6">
-          <div className="w-full border-t border-default" />
+          <div className="w-full border-t border-muted" />
           <span className="absolute bg-canvas-default px-4 text-xs font-medium text-fg-muted">
             Or
           </span>

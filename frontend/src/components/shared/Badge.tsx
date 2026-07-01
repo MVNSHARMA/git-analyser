@@ -12,7 +12,7 @@ export function Badge({ variant = 'default', children, className = '' }: BadgePr
     warning: 'border-attention-fg text-attention-fg bg-canvas-default',
     error:   'border-danger-fg text-danger-fg bg-canvas-default',
     info:    'border-accent-emphasis text-accent-emphasis bg-canvas-default',
-    default: 'border-default text-fg-default bg-canvas-default',
+    default: 'border-muted text-fg-default bg-canvas-default',
   };
 
   return (

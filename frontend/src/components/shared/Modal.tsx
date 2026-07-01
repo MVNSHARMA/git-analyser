@@ -32,9 +32,9 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
       />
 
       {/* Modal Dialog */}
-      <div className="relative w-full max-w-md bg-canvas-default border border-default rounded-lg shadow-elevation-large overflow-hidden animate-fade-in z-10 p-0">
+      <div className="relative w-full max-w-md bg-canvas-default border border-muted rounded-lg shadow-elevation-large overflow-hidden animate-fade-in z-10 p-0">
         {/* Header */}
-        <div className="flex items-center justify-between p-5 border-b border-default bg-canvas-subtle">
+        <div className="flex items-center justify-between p-5 border-b border-muted bg-canvas-subtle">
           {title ? (
             <h3 className="text-base font-semibold text-fg-default">
               {title}
@@ -44,7 +44,7 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
           )}
           <button
             onClick={onClose}
-            className="text-fg-muted hover:text-fg-default hover:bg-canvas-default border border-default rounded-md p-1.5 surface-hover"
+            className="text-fg-muted hover:text-fg-default hover:bg-canvas-default border border-muted rounded-md p-1.5 surface-hover"
           >
             <X className="w-4 h-4" />
           </button>

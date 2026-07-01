@@ -123,13 +123,13 @@ export function Settings() {
 
         <div className="space-y-8">
           {/* Section 1: Profile Details */}
-          <section className="bg-canvas-default border border-default rounded-lg p-6">
+          <section className="bg-canvas-default border border-muted rounded-lg p-6">
             <h2 className="text-lg font-semibold mb-6 flex items-center gap-2 text-fg-default">
               <UserIcon className="w-5 h-5 text-accent-emphasis" />
               Profile Information
             </h2>
 
-            <div className="border-t border-default mb-6" />
+            <div className="border-t border-muted mb-6" />
 
             <form onSubmit={handleUpdateProfile} className="space-y-6">
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 pb-2">
@@ -176,13 +176,13 @@ export function Settings() {
           </section>
 
           {/* Section 2: Repos List */}
-          <section className="bg-canvas-default border border-default rounded-lg p-6">
+          <section className="bg-canvas-default border border-muted rounded-lg p-6">
             <h2 className="text-lg font-semibold mb-6 flex items-center gap-2 text-fg-default">
               <Trash2 className="w-5 h-5 text-accent-emphasis" />
               Manage Repositories
             </h2>
 
-            <div className="border-t border-default mb-6" />
+            <div className="border-t border-muted mb-6" />
 
             {isReposLoading ? (
               <div className="py-8 flex justify-center"><Spinner size="sm" /></div>
@@ -195,7 +195,7 @@ export function Settings() {
                 {repos.map((repo: Repository) => (
                   <div
                     key={repo.id}
-                    className="p-4 bg-canvas-subtle border border-default rounded-md flex items-center justify-between gap-4 text-sm"
+                    className="p-4 bg-canvas-subtle border border-muted rounded-md flex items-center justify-between gap-4 text-sm"
                   >
                     <div className="truncate">
                       <div className="flex items-center gap-2">

@@ -126,9 +126,9 @@ export function Dashboard() {
   return (
     <div className="flex h-screen bg-canvas-default text-fg-default overflow-hidden font-sans">
       {/* 1. Left Sidebar */}
-      <aside className="w-80 bg-canvas-default border-r border-default flex flex-col z-20">
+      <aside className="w-80 bg-canvas-default border-r border-muted flex flex-col z-20">
         {/* Logo */}
-        <div className="p-6 border-b border-default flex items-center justify-between bg-canvas-default">
+        <div className="p-6 border-b border-muted flex items-center justify-between bg-canvas-default">
           <div className="flex items-center gap-2">
             <span className="text-lg font-mono font-semibold select-none flex items-center text-fg-default">
               <span className="text-accent-emphasis mr-0.5">&gt;_</span>
@@ -140,11 +140,11 @@ export function Dashboard() {
           <div className="relative">
             <button
               onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
-              className="p-1.5 border border-default rounded-md bg-canvas-default hover:bg-canvas-subtle text-fg-default transition-colors relative surface-hover"
+              className="p-1.5 border border-muted rounded-md bg-canvas-default hover:bg-canvas-subtle text-fg-default transition-colors relative surface-hover"
             >
               <Bell className="w-4 h-4" />
               {unreadCountRes && unreadCountRes.count > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 bg-accent-emphasis text-fg-onEmphasis text-[8px] font-semibold h-4.5 w-4.5 rounded-full flex items-center justify-center">
+                <span className="absolute -top-1.5 -right-1.5 bg-accent-emphasis text-fg-onAccent text-[8px] font-semibold h-4.5 w-4.5 rounded-full flex items-center justify-center">
                   {unreadCountRes.count}
                 </span>
               )}
@@ -166,7 +166,7 @@ export function Dashboard() {
             <span>Connected Repositories</span>
             <button
               onClick={() => setIsAddModalOpen(true)}
-              className="p-1 border border-default rounded-md hover:bg-canvas-subtle text-fg-default transition-all surface-hover"
+              className="p-1 border border-muted rounded-md hover:bg-canvas-subtle text-fg-default transition-all surface-hover"
               title="Add Repository"
             >
               <Plus className="w-3.5 h-3.5" />
@@ -178,7 +178,7 @@ export function Dashboard() {
               <Spinner size="sm" />
             </div>
           ) : repos.length === 0 ? (
-            <div className="text-center py-8 px-4 border border-dashed border-default rounded-md bg-canvas-default">
+            <div className="text-center py-8 px-4 border border-dashed border-muted rounded-md bg-canvas-default">
               <p className="text-xs text-fg-muted font-medium">No repositories added yet</p>
               <Button
                 variant="ghost"
@@ -200,8 +200,8 @@ export function Dashboard() {
                     key={repo.id}
                     className={`p-4 border rounded-md transition-all cursor-pointer surface-hover ${
                       isSelected
-                        ? 'border-l-4 border-l-accent-emphasis border-default bg-accent-subtle'
-                        : 'border-default bg-canvas-default'
+                        ? 'border-l-4 border-l-accent-emphasis border-muted bg-canvas-default'
+                        : 'border-muted bg-canvas-default'
                     }`}
                     onClick={() => handleSelectRepo(repo)}
                   >
@@ -220,7 +220,7 @@ export function Dashboard() {
                           reindexMutation.mutate(repo.id);
                         }}
                         disabled={isIndexing || reindexMutation.isPending}
-                        className="p-1 border border-default rounded-md hover:bg-canvas-subtle text-fg-default transition-colors"
+                        className="p-1 border border-muted rounded-md hover:bg-canvas-subtle text-fg-default transition-colors"
                         title="Reindex Repository"
                       >
                         <RefreshCw className={`w-3 h-3 ${isIndexing ? 'animate-spin text-accent-emphasis' : ''}`} />
@@ -236,48 +236,18 @@ export function Dashboard() {
             </div>
           )}
         </div>
-
-        {/* User Footer */}
-        <div className="p-4 border-t border-default bg-canvas-default flex items-center justify-between">
-          <div
-            className="flex items-center gap-3 cursor-pointer group"
-            onClick={() => navigate('/settings')}
-          >
-            <Avatar name={user?.display_name || 'User'} src={user?.avatar_url} size="sm" />
-            <div className="truncate">
-              <h4 className="text-xs font-semibold group-hover:text-accent-emphasis transition-colors truncate">
-                {user?.display_name}
-              </h4>
-              <p className="text-[10px] text-fg-muted truncate font-medium mt-0.5">
-                {user?.email}
-              </p>
-            </div>
-          </div>
-          <div className="flex gap-1">
-            <ThemeToggle className="w-8 h-8" />
-            <button
-              onClick={() => navigate('/settings')}
-              className="p-2 border border-default rounded-md hover:bg-canvas-subtle text-fg-default transition-colors surface-hover"
-              title="Settings"
-            >
-              <SettingsIcon className="w-3.5 h-3.5" />
-            </button>
-            <button
-              onClick={handleLogout}
-              className="p-2 border border-default rounded-md hover:bg-danger-fg/10 text-danger-fg transition-colors surface-hover"
-              title="Sign Out"
-            >
-              <LogOut className="w-3.5 h-3.5" />
-            </button>
-          </div>
-        </div>
       </aside>
 
       {/* 2. Main Content Area */}
       <main className="flex-1 flex flex-col h-full bg-canvas-default overflow-hidden relative">
+        {/* Profile menu — always visible, top-right, regardless of repo-selection state */}
+        <div className="absolute top-4 right-6 z-30">
+          <ProfileMenu user={user} onLogout={handleLogout} />
+        </div>
+
         {!selectedRepo ? (
           <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-canvas-default">
-            <div className="p-4 bg-canvas-subtle border border-default rounded-lg text-accent-emphasis mb-6">
+            <div className="p-4 bg-canvas-subtle border border-muted rounded-lg text-accent-emphasis mb-6">
               <Terminal className="w-10 h-10" />
             </div>
             <h2 className="text-3xl font-semibold">Get Started</h2>
@@ -295,7 +265,7 @@ export function Dashboard() {
         ) : (
           <div className="flex-1 flex flex-col overflow-hidden">
             {/* Header Tabs */}
-            <div className="px-6 py-5 border-b border-default flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-canvas-default z-10">
+            <div className="pl-6 pr-44 py-5 border-b border-muted flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-canvas-subtle z-10">
               <div>
                 <h2 className="text-lg font-semibold text-fg-default">
                   {selectedRepo.display_name}
@@ -322,7 +292,7 @@ export function Dashboard() {
                       className={`flex items-center gap-2 px-4 py-2 text-xs font-medium rounded-md border-b-2 transition-all duration-100 ${
                         isActive
                           ? 'border-accent-emphasis text-accent-emphasis font-semibold'
-                          : 'border-transparent text-fg-muted hover:text-fg-default hover:border-border-default'
+                          : 'border-transparent text-fg-muted hover:text-fg-default hover:border-muted'
                       }`}
                     >
                       <Icon className="w-3.5 h-3.5" />
@@ -384,8 +354,8 @@ function NotificationsPopover({
   });
 
   return (
-    <div className="absolute right-0 mt-3 w-80 bg-canvas-default border border-default rounded-lg shadow-elevation-large z-50 animate-fade-in max-h-96 flex flex-col">
-      <div className="p-4 border-b border-default bg-canvas-subtle flex items-center justify-between">
+    <div className="absolute right-0 mt-3 w-80 bg-canvas-default border border-muted rounded-lg shadow-elevation-large z-50 animate-fade-in max-h-96 flex flex-col">
+      <div className="p-4 border-b border-muted bg-canvas-subtle flex items-center justify-between">
         <h4 className="text-xs font-semibold text-fg-default">Notifications</h4>
         {notifications.some((n) => !n.read_at) && (
           <button
@@ -397,7 +367,7 @@ function NotificationsPopover({
         )}
       </div>
 
-      <div className="flex-1 overflow-y-auto divide-y divide-border-default">
+      <div className="flex-1 overflow-y-auto divide-y divide-muted">
         {notifications.length === 0 ? (
           <div className="p-8 text-center text-xs text-fg-muted font-medium">
             No notifications yet.
@@ -434,6 +404,72 @@ function NotificationsPopover({
           })
         )}
       </div>
+    </div>
+  );
+}
+
+// -------------------------------------------------------------
+// Sub-components: Profile Menu
+// -------------------------------------------------------------
+function ProfileMenu({ user, onLogout }: { user: any; onLogout: () => void }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const goToSettings = () => {
+    setIsOpen(false);
+    navigate('/settings');
+  };
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center gap-2 pl-1.5 pr-3 py-1.5 rounded-md text-fg-default transition-colors"
+      >
+        <Avatar name={user?.display_name || 'User'} src={user?.avatar_url} size="sm" />
+        <span className="text-xs font-medium truncate max-w-[120px]">{user?.display_name}</span>
+      </button>
+
+      {isOpen && (
+        <div className="absolute right-0 mt-2 w-64 bg-canvas-default border border-muted rounded-lg shadow-elevation-large z-50 animate-fade-in overflow-hidden">
+          {/* Account */}
+          <button
+            onClick={goToSettings}
+            className="w-full flex items-center gap-3 p-3 hover:bg-canvas-subtle transition-colors text-left border-b border-muted"
+          >
+            <Avatar name={user?.display_name || 'User'} src={user?.avatar_url} size="sm" />
+            <div className="truncate">
+              <h4 className="text-xs font-semibold text-fg-default truncate">{user?.display_name}</h4>
+              <p className="text-[10px] text-fg-muted truncate">{user?.email}</p>
+            </div>
+          </button>
+
+          {/* Theme */}
+          <div className="flex items-center justify-between px-3 py-2.5 hover:bg-canvas-subtle transition-colors">
+            <span className="text-xs text-fg-default font-medium">Theme</span>
+            <ThemeToggle className="w-7 h-7" />
+          </div>
+
+          {/* Settings */}
+          <button
+            onClick={goToSettings}
+            className="w-full flex items-center gap-2 px-3 py-2.5 text-xs font-medium text-fg-default hover:bg-canvas-subtle transition-colors text-left"
+          >
+            <SettingsIcon className="w-3.5 h-3.5" /> Settings
+          </button>
+
+          {/* Sign Out */}
+          <button
+            onClick={() => {
+              setIsOpen(false);
+              onLogout();
+            }}
+            className="w-full flex items-center gap-2 px-3 py-2.5 text-xs font-medium text-danger-fg hover:bg-danger-fg/10 transition-colors text-left border-t border-muted"
+          >
+            <LogOut className="w-3.5 h-3.5" /> Sign Out
+          </button>
+        </div>
+      )}
     </div>
   );
 }
@@ -558,8 +594,8 @@ function ChatTab({ repoId }: { repoId: string }) {
   return (
     <div className="absolute inset-0 flex">
       {/* Conversation Sidebar (Inside Chat Tab) */}
-      <div className="w-64 border-r border-default flex flex-col bg-canvas-default h-full">
-        <div className="p-4 border-b border-default bg-canvas-default">
+      <div className="w-64 border-r border-muted flex flex-col bg-canvas-default h-full">
+        <div className="p-4 border-b border-muted bg-canvas-default">
           <Button
             variant="secondary"
             size="sm"
@@ -588,8 +624,8 @@ function ChatTab({ repoId }: { repoId: string }) {
                   key={conv.id}
                   className={`p-2.5 border rounded-md text-xs cursor-pointer flex items-center justify-between group transition-colors surface-hover ${
                     isSelected
-                      ? 'bg-accent-subtle border-l-4 border-l-accent-emphasis border-default text-fg-default font-semibold'
-                      : 'text-fg-default bg-canvas-default border-default font-medium'
+                      ? 'bg-canvas-default border-l-4 border-l-accent-emphasis border-muted text-fg-default font-semibold'
+                      : 'text-fg-default bg-canvas-default border-muted font-medium'
                   }`}
                   onClick={() => navigate(`/repo/${repoId}/chat/${conv.id}`)}
                 >
@@ -604,7 +640,7 @@ function ChatTab({ repoId }: { repoId: string }) {
                       e.stopPropagation();
                       deleteConvMutation.mutate(conv.id);
                     }}
-                    className="opacity-0 group-hover:opacity-100 p-0.5 border border-default rounded hover:bg-canvas-subtle text-fg-muted hover:text-danger-fg transition-all"
+                    className="opacity-0 group-hover:opacity-100 p-0.5 border border-muted rounded hover:bg-canvas-subtle text-fg-muted hover:text-danger-fg transition-all"
                   >
                     <Trash2 className="w-3 h-3" />
                   </button>
@@ -624,7 +660,7 @@ function ChatTab({ repoId }: { repoId: string }) {
               <Spinner />
             </div>
           ) : !activeConvId ? (
-            <div className="flex flex-col items-center justify-center h-full text-center p-8 bg-canvas-default">
+            <div className="flex flex-col items-center justify-center h-full text-center p-8">
               <MessageSquare className="w-12 h-12 text-fg-muted mb-4" />
               <h4 className="text-lg font-semibold">Start a Conversation</h4>
               <p className="text-xs text-fg-muted mt-2 max-w-xs leading-normal font-medium">
@@ -649,7 +685,7 @@ function ChatTab({ repoId }: { repoId: string }) {
                 />
               )}
               {isStreaming && !streamingMessage && (
-                <div className="flex gap-4 p-5 bg-canvas-subtle border border-default rounded-lg max-w-2xl">
+                <div className="flex gap-4 p-5 bg-canvas-subtle border border-muted rounded-lg max-w-2xl">
                   <Avatar name="Git Analyser" size="sm" />
                   <div className="flex items-center gap-1.5">
                     <span className="h-2.5 w-2.5 bg-accent-emphasis rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
@@ -663,7 +699,7 @@ function ChatTab({ repoId }: { repoId: string }) {
         </div>
 
         {/* Input box */}
-        <div className="p-4 border-t border-default bg-canvas-default">
+        <div className="px-4 pt-4 pb-8 bg-canvas-default">
           <form onSubmit={handleSendMessage} className="max-w-4xl mx-auto relative flex items-center">
             <input
               type="text"
@@ -671,12 +707,12 @@ function ChatTab({ repoId }: { repoId: string }) {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               disabled={isStreaming}
-              className="w-full pl-4 pr-12 py-3 bg-canvas-default border border-default rounded-md text-xs text-fg-default placeholder-fg-subtle outline-none focus:border-accent-emphasis focus:ring-1 focus:ring-accent-emphasis transition-colors font-sans"
+              className="w-full pl-4 pr-12 py-3 bg-canvas-default border border-muted rounded-md text-xs text-fg-default placeholder-fg-subtle outline-none focus:border-accent-faded transition-colors font-sans"
             />
             <button
               type="submit"
               disabled={isStreaming || !input.trim()}
-              className="absolute right-3 p-1.5 bg-accent-emphasis rounded-md text-fg-onEmphasis transition-all hover:bg-accent-hover disabled:opacity-50"
+              className="absolute right-3 p-1.5 bg-accent-emphasis rounded-md text-fg-onAccent transition-all hover:bg-accent-hover disabled:opacity-50"
             >
               <Send className="w-3.5 h-3.5" />
             </button>
@@ -704,8 +740,8 @@ function MessageBubble({ message }: { message: Partial<ChatMessage> }) {
     <div
       className={`flex gap-4 p-5 max-w-3xl border rounded-lg transition-all ${
         isUser
-          ? 'bg-canvas-default border-default ml-auto'
-          : 'bg-canvas-subtle border-default'
+          ? 'bg-canvas-subtle border-muted ml-auto'
+          : 'bg-canvas-subtle border-muted'
       }`}
     >
       <Avatar
@@ -738,7 +774,7 @@ function MessageBubble({ message }: { message: Partial<ChatMessage> }) {
                       {children}
                     </code>
                   ) : (
-                    <pre className="bg-canvas-subtle p-4 rounded-md overflow-x-auto border border-default text-xs font-mono my-2 scrollbar-thin text-fg-default">
+                    <pre className="bg-canvas-default p-4 rounded-md overflow-x-auto border border-muted text-xs font-mono my-2 scrollbar-thin text-fg-default">
                       <code className={className} {...props}>
                         {children}
                       </code>
@@ -754,17 +790,17 @@ function MessageBubble({ message }: { message: Partial<ChatMessage> }) {
 
         {/* Feedback triggers for assistant */}
         {!isUser && message.id && message.id !== 'streaming' && (
-          <div className="flex items-center gap-2 mt-4 pt-3 border-t border-default">
+          <div className="flex items-center gap-2 mt-4 pt-3 border-t border-muted">
             <button
               onClick={() => handleFeedback('like')}
-              className="p-1 border border-default rounded hover:bg-canvas-subtle text-fg-default transition-colors surface-hover"
+              className="p-1 border border-muted rounded hover:bg-canvas-subtle text-fg-default transition-colors surface-hover"
               title="Helpful"
             >
               <ThumbsUp className="w-3 h-3" />
             </button>
             <button
               onClick={() => handleFeedback('dislike')}
-              className="p-1 border border-default rounded hover:bg-danger-fg/10 text-danger-fg transition-colors surface-hover"
+              className="p-1 border border-muted rounded hover:bg-danger-fg/10 text-danger-fg transition-colors surface-hover"
               title="Not helpful"
             >
               <ThumbsDown className="w-3 h-3" />
@@ -815,7 +851,7 @@ function CommitsTab({ repoId }: { repoId: string }) {
   return (
     <div className="absolute inset-0 p-6 flex flex-col h-full bg-canvas-default overflow-y-auto">
       {/* Filters Form */}
-      <div className="grid grid-cols-1 sm:grid-cols-5 gap-4 mb-6 bg-canvas-default border border-default rounded-lg p-4">
+      <div className="grid grid-cols-1 sm:grid-cols-5 gap-4 mb-6 bg-canvas-subtle border border-muted rounded-lg p-4">
         <Input
           placeholder="Search messages..."
           value={search}
@@ -843,7 +879,7 @@ function CommitsTab({ repoId }: { repoId: string }) {
               setBranch(e.target.value);
               setPage(1);
             }}
-            className="w-full px-4 py-2.5 bg-canvas-default border border-default rounded-md text-xs text-fg-default focus:outline-none focus:border-accent-emphasis focus:ring-1 focus:ring-accent-emphasis transition-colors font-sans"
+            className="w-full px-4 py-2.5 bg-canvas-default border border-muted rounded-md text-xs text-fg-default focus:outline-none focus:border-accent-emphasis focus:ring-1 focus:ring-accent-emphasis transition-colors font-sans"
           >
             <option value="">All Branches</option>
             {branches?.map((b) => (
@@ -863,7 +899,7 @@ function CommitsTab({ repoId }: { repoId: string }) {
               setFrom(e.target.value);
               setPage(1);
             }}
-            className="w-1/2 px-2 py-2 bg-canvas-default border border-default rounded-md text-xs text-fg-default focus:outline-none focus:border-accent-emphasis"
+            className="w-1/2 px-2 py-2 bg-canvas-default border border-muted rounded-md text-xs text-fg-default focus:outline-none focus:border-accent-emphasis"
           />
           <input
             type="date"
@@ -873,7 +909,7 @@ function CommitsTab({ repoId }: { repoId: string }) {
               setTo(e.target.value);
               setPage(1);
             }}
-            className="w-1/2 px-2 py-2 bg-canvas-default border border-default rounded-md text-xs text-fg-default focus:outline-none focus:border-accent-emphasis"
+            className="w-1/2 px-2 py-2 bg-canvas-default border border-muted rounded-md text-xs text-fg-default focus:outline-none focus:border-accent-emphasis"
           />
         </div>
 
@@ -897,7 +933,7 @@ function CommitsTab({ repoId }: { repoId: string }) {
       </div>
 
       {/* Commit Table viewport */}
-      <div className="flex-1 overflow-x-auto min-h-0 bg-canvas-default border border-default rounded-lg">
+      <div className="flex-1 overflow-x-auto min-h-0 bg-canvas-default border border-muted rounded-lg">
         {isLoading ? (
           <div className="flex items-center justify-center py-20">
             <Spinner />
@@ -909,28 +945,28 @@ function CommitsTab({ repoId }: { repoId: string }) {
         ) : (
           <table className="w-full text-left border-collapse text-xs">
             <thead>
-              <tr className="border-b border-default bg-canvas-subtle text-[10px] font-semibold text-fg-muted">
-                <th className="p-3 border-r border-default">SHA</th>
-                <th className="p-3 border-r border-default">Author</th>
-                <th className="p-3 border-r border-default">Message</th>
-                <th className="p-3 border-r border-default">Date</th>
+              <tr className="border-b border-muted bg-canvas-subtle text-[10px] font-semibold text-fg-muted">
+                <th className="p-3 border-r border-muted">SHA</th>
+                <th className="p-3 border-r border-muted">Author</th>
+                <th className="p-3 border-r border-muted">Message</th>
+                <th className="p-3 border-r border-muted">Date</th>
                 <th className="p-3 text-right">Additions/Deletions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border-default text-fg-default">
+            <tbody className="divide-y divide-muted text-fg-default">
               {data.commits.map((commit, idx) => (
                 <tr key={commit.id} className={`${idx % 2 === 1 ? 'bg-canvas-subtle/40' : 'bg-canvas-default'} hover:bg-canvas-subtle transition-colors`}>
-                  <td className="p-3 border-r border-default font-mono font-medium text-accent-emphasis">
+                  <td className="p-3 border-r border-muted font-mono font-medium text-accent-emphasis">
                     {commit.short_sha}
                   </td>
-                  <td className="p-3 border-r border-default">
+                  <td className="p-3 border-r border-muted">
                     <div className="font-semibold text-fg-default">{commit.author_name}</div>
                     <div className="text-[10px] text-fg-muted font-medium">{commit.author_email}</div>
                   </td>
-                  <td className="p-3 border-r border-default font-medium leading-relaxed max-w-sm truncate">
+                  <td className="p-3 border-r border-muted font-medium leading-relaxed max-w-sm truncate">
                     {commit.message_subject}
                   </td>
-                  <td className="p-3 border-r border-default font-medium">
+                  <td className="p-3 border-r border-muted font-medium">
                     {new Date(commit.committed_at).toLocaleDateString()}
                   </td>
                   <td className="p-3 text-right font-semibold">
@@ -1017,14 +1053,14 @@ function BranchesTab({ repoId }: { repoId: string }) {
     <div className="absolute inset-0 p-6 flex flex-col h-full bg-canvas-default overflow-y-auto">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Branch listing column */}
-        <div className="bg-canvas-default border border-default rounded-lg p-5 flex flex-col h-fit">
+        <div className="bg-canvas-default border border-muted rounded-lg p-5 flex flex-col h-fit">
           <h3 className="text-xs font-semibold mb-4 text-fg-default">Repository Branches</h3>
           {isBranchesLoading ? (
             <div className="py-8 flex justify-center"><Spinner size="sm" /></div>
           ) : (
             <div className="space-y-3">
               {branches?.map((b) => (
-                <div key={b.id} className="p-3 bg-canvas-subtle border border-default rounded-md flex items-center justify-between text-xs font-medium">
+                <div key={b.id} className="p-3 bg-canvas-subtle border border-muted rounded-md flex items-center justify-between text-xs font-medium">
                   <div className="truncate">
                     <div className="font-semibold text-fg-default flex items-center gap-2">
                       <GitBranch className="w-3.5 h-3.5 text-accent-emphasis" />
@@ -1042,7 +1078,7 @@ function BranchesTab({ repoId }: { repoId: string }) {
         </div>
 
         {/* Branch Comparison selector column */}
-        <div className="bg-canvas-default border border-default rounded-lg p-5 md:col-span-2 flex flex-col">
+        <div className="bg-canvas-default border border-muted rounded-lg p-5 md:col-span-2 flex flex-col">
           <h3 className="text-xs font-semibold mb-4 text-fg-default">Compare Branch Conflicts</h3>
           <div className="flex flex-col sm:flex-row gap-4 mb-6">
             <div className="w-full sm:w-1/2">
@@ -1050,7 +1086,7 @@ function BranchesTab({ repoId }: { repoId: string }) {
               <select
                 value={baseBranch}
                 onChange={(e) => setBaseBranch(e.target.value)}
-                className="w-full px-4 py-2.5 bg-canvas-default border border-default rounded-md text-xs text-fg-default focus:outline-none focus:border-accent-emphasis focus:ring-1 focus:ring-accent-emphasis transition-colors font-sans"
+                className="w-full px-4 py-2.5 bg-canvas-default border border-muted rounded-md text-xs text-fg-default focus:outline-none focus:border-accent-emphasis focus:ring-1 focus:ring-accent-emphasis transition-colors font-sans"
               >
                 <option value="">Select Base</option>
                 {branches?.map((b) => (
@@ -1066,7 +1102,7 @@ function BranchesTab({ repoId }: { repoId: string }) {
               <select
                 value={headBranch}
                 onChange={(e) => setHeadBranch(e.target.value)}
-                className="w-full px-4 py-2.5 bg-canvas-default border border-default rounded-md text-xs text-fg-default focus:outline-none focus:border-accent-emphasis focus:ring-1 focus:ring-accent-emphasis transition-colors font-sans"
+                className="w-full px-4 py-2.5 bg-canvas-default border border-muted rounded-md text-xs text-fg-default focus:outline-none focus:border-accent-emphasis focus:ring-1 focus:ring-accent-emphasis transition-colors font-sans"
               >
                 <option value="">Select Head</option>
                 {branches?.map((b) => (
@@ -1089,7 +1125,7 @@ function BranchesTab({ repoId }: { repoId: string }) {
 
           {/* Comparison results */}
           {comparison && (
-            <div className="mt-8 border-t border-default pt-6 space-y-6">
+            <div className="mt-8 border-t border-muted pt-6 space-y-6">
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div className="flex gap-6">
                   <div>
@@ -1124,7 +1160,7 @@ function BranchesTab({ repoId }: { repoId: string }) {
                 ) : (
                   <div className="space-y-2 max-h-48 overflow-y-auto">
                     {comparison.potentialConflictFiles.map((file: string) => (
-                      <div key={file} className="p-3 bg-canvas-subtle border border-default rounded-md flex items-center gap-3 text-xs font-medium text-fg-default">
+                      <div key={file} className="p-3 bg-canvas-subtle border border-muted rounded-md flex items-center gap-3 text-xs font-medium text-fg-default">
                         <FileCode className="w-4 h-4 text-accent-emphasis" />
                         <span className="font-mono">{file}</span>
                       </div>
@@ -1168,7 +1204,7 @@ function ContributorsTab({ repoId }: { repoId: string }) {
             <div
               key={c.id}
               onClick={() => setSelectedContributor(c)}
-              className="p-5 bg-canvas-default border border-default rounded-lg surface-hover cursor-pointer flex flex-col justify-between"
+              className="p-5 bg-canvas-default border border-muted rounded-lg surface-hover cursor-pointer flex flex-col justify-between"
             >
               <div className="flex items-start gap-4">
                 <Avatar name={c.display_name} src={c.avatar_url} size="md" />
@@ -1184,7 +1220,7 @@ function ContributorsTab({ repoId }: { repoId: string }) {
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-2 mt-6 pt-4 border-t border-default text-center">
+              <div className="grid grid-cols-3 gap-2 mt-6 pt-4 border-t border-muted text-center">
                 <div>
                   <span className="text-[9px] text-fg-muted font-medium">Commits</span>
                   <span className="text-xs font-semibold text-fg-default block mt-1">{c.total_commits}</span>
@@ -1240,8 +1276,8 @@ function ContributorCommitsModal({
       <div className="absolute inset-0 bg-black/60" onClick={onClose} />
 
       {/* Dialog */}
-      <div className="relative w-full max-w-xl bg-canvas-default border border-default rounded-lg shadow-elevation-large p-6 z-10 animate-fade-in flex flex-col max-h-[80vh]">
-        <div className="flex items-center justify-between border-b border-default pb-4 mb-4">
+      <div className="relative w-full max-w-xl bg-canvas-default border border-muted rounded-lg shadow-elevation-large p-6 z-10 animate-fade-in flex flex-col max-h-[80vh]">
+        <div className="flex items-center justify-between border-b border-muted pb-4 mb-4">
           <div className="flex items-center gap-3">
             <Avatar name={contributor.display_name} src={contributor.avatar_url} size="sm" />
             <div>
@@ -1251,7 +1287,7 @@ function ContributorCommitsModal({
           </div>
           <button
             onClick={onClose}
-            className="text-fg-default text-xs border border-default rounded-md px-3 py-1.5 font-medium hover:bg-canvas-subtle transition-colors surface-hover"
+            className="text-fg-default text-xs border border-muted rounded-md px-3 py-1.5 font-medium hover:bg-canvas-subtle transition-colors surface-hover"
           >
             Close
           </button>
@@ -1268,7 +1304,7 @@ function ContributorCommitsModal({
             </div>
           ) : (
             commits.map((c) => (
-              <div key={c.id} className="p-3 bg-canvas-subtle border border-default rounded-md flex items-start justify-between gap-4 font-medium text-xs">
+              <div key={c.id} className="p-3 bg-canvas-subtle border border-muted rounded-md flex items-start justify-between gap-4 font-medium text-xs">
                 <div className="truncate">
                   <div className="flex items-center gap-2">
                     <span className="text-[10px] font-mono text-accent-emphasis font-semibold">{c.short_sha}</span>

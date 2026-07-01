@@ -78,10 +78,10 @@ export function LoginPage() {
         <ThemeToggle />
       </div>
 
-      <div className="w-full max-w-md bg-canvas-default border border-default rounded-lg shadow-elevation-medium p-8 z-10 text-fg-default">
+      <div className="w-full max-w-md bg-canvas-default border border-muted rounded-lg shadow-elevation-medium p-8 z-10 text-fg-default">
         {/* Title */}
         <div className="flex flex-col items-center mb-8">
-          <div className="p-3 bg-canvas-subtle border border-default rounded-lg text-accent-emphasis w-fit mb-4">
+          <div className="p-3 bg-canvas-subtle border border-muted rounded-lg text-accent-emphasis w-fit mb-4">
             <Terminal className="w-8 h-8" />
           </div>
           <h2 className="text-3xl font-semibold text-fg-default">Sign In</h2>
@@ -120,7 +120,7 @@ export function LoginPage() {
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2.5 bg-canvas-default border border-default rounded-md text-fg-default placeholder-fg-subtle focus:outline-none focus:border-accent-emphasis focus:ring-1 focus:ring-accent-emphasis transition-colors"
+              className="w-full px-4 py-2.5 bg-canvas-default border border-muted rounded-md text-fg-default placeholder-fg-subtle focus:outline-none focus:border-accent-emphasis focus:ring-1 focus:ring-accent-emphasis transition-colors"
               disabled={loading}
               required
             />
@@ -138,7 +138,7 @@ export function LoginPage() {
 
         {/* Separator */}
         <div className="relative flex items-center justify-center my-6">
-          <div className="w-full border-t border-default" />
+          <div className="w-full border-t border-muted" />
           <span className="absolute bg-canvas-default px-4 text-xs font-medium text-fg-muted">
             Or
           </span>

@@ -136,7 +136,7 @@ export async function githubCallback(req: Request, res: Response, next: NextFunc
       throw new AuthError('TOKEN_INVALID', 'OAuth authorization code is required');
     }
 
-    const { accessToken, refreshToken, user } = await handleGithubOAuth(code);
+    const { accessToken, refreshToken } = await handleGithubOAuth(code);
     
     res.cookie(COOKIE_NAME, refreshToken, cookieOptions);
     

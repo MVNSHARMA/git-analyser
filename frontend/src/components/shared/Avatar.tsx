@@ -28,7 +28,7 @@ export default function Avatar({ src, name, size = 'md', className = '' }: Avata
       <img
         src={src}
         alt={name}
-        className={`${sizeClasses[size]} rounded-full object-cover border border-default ${className}`}
+        className={`${sizeClasses[size]} rounded-full object-cover border border-muted ${className}`}
         onError={() => setImgError(true)}
       />
     );
@@ -36,7 +36,7 @@ export default function Avatar({ src, name, size = 'md', className = '' }: Avata
 
   return (
     <div
-      className={`${sizeClasses[size]} rounded-full bg-accent-emphasis border border-default flex items-center justify-center font-semibold text-fg-onEmphasis ${className}`}
+      className={`${sizeClasses[size]} rounded-full bg-accent-emphasis border border-muted flex items-center justify-center font-semibold text-fg-onAccent ${className}`}
     >
       {initials}
     </div>

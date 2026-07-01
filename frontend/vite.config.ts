@@ -10,6 +10,13 @@ export default defineConfig({
     hmr: {
       overlay: false,
     },
+    // Docker Desktop on Windows doesn't reliably propagate native filesystem change events
+    // through the bind mount (./frontend:/app) into the container's inotify watcher, so Vite
+    // never sees host-side edits without polling.
+    watch: {
+      usePolling: true,
+      interval: 300,
+    },
     proxy: {
       '/api': {
         target: 'http://localhost:4000',

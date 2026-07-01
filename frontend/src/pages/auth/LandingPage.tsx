@@ -7,7 +7,7 @@ export function LandingPage() {
   return (
     <div className="min-h-screen bg-canvas-default text-fg-default flex flex-col relative">
       {/* Header / Navbar */}
-      <header className="w-full border-b border-default bg-canvas-default z-10">
+      <header className="w-full border-b border-muted bg-canvas-default z-10">
         <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="text-xl font-mono font-semibold select-none flex items-center">
@@ -33,7 +33,7 @@ export function LandingPage() {
 
       {/* Hero Section */}
       <main className="flex-1 flex flex-col justify-center max-w-5xl mx-auto px-6 text-center z-10 pt-16 pb-24">
-        <div className="inline-flex items-center self-center px-4 py-1.5 rounded-full border border-default text-xs text-accent-emphasis font-medium bg-accent-subtle mb-8 animate-fade-in select-none">
+        <div className="inline-flex items-center self-center px-4 py-1.5 rounded-full border border-muted text-xs text-accent-emphasis font-medium bg-accent-subtle mb-8 animate-fade-in select-none">
           Next-generation Repository Insights
         </div>
 
@@ -63,7 +63,7 @@ export function LandingPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left mt-8">
           {/* Card 1 */}
           <div className="p-8 surface-card flex flex-col">
-            <div className="p-3 bg-accent-emphasis text-fg-onEmphasis rounded-lg w-fit mb-6">
+            <div className="p-3 bg-accent-emphasis text-fg-onAccent rounded-lg w-fit mb-6">
               <MessageSquare className="w-6 h-6" />
             </div>
             <h3 className="text-lg font-semibold mb-3">AI Repository Chat</h3>
@@ -97,7 +97,7 @@ export function LandingPage() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full border-t border-default bg-canvas-default mt-auto">
+      <footer className="w-full border-t border-muted bg-canvas-default mt-auto">
         <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-medium text-fg-muted">
           <p>© 2026 Git Analyser. All rights reserved.</p>
           <div className="flex gap-6">

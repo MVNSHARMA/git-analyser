@@ -14,11 +14,7 @@ export default {
           muted:   'var(--color-fg-muted)',
           subtle:  'var(--color-fg-subtle)',
           onEmphasis: 'var(--color-fg-on-emphasis)',
-        },
-        border: {
-          default: 'var(--color-border-default)',
-          muted:   'var(--color-border-muted)',
-          subtle:  'var(--color-border-subtle)',
+          onAccent: 'var(--color-fg-on-accent)',
         },
         neutral: {
           50:  'var(--color-neutral-50)',
@@ -39,7 +35,27 @@ export default {
           emphasis: 'var(--color-accent-emphasis)',
           hover:    'var(--color-accent-emphasis-hover)',
           subtle:   'var(--color-accent-subtle)',
+          faded:    'var(--color-accent-faded)',
         },
+      },
+      // Separate namespaces (not nested under `colors`) so the generated class names are
+      // `border-default`/`border-muted`/`divide-default`/`divide-muted` — nesting these under
+      // `colors.border` instead generates `border-border-default` (colors.<key> path prefixed
+      // by the border- utility), which silently doesn't match any class actually used in JSX.
+      borderColor: {
+        default: 'var(--color-border-default)',
+        muted:   'var(--color-border-muted)',
+        subtle:  'var(--color-border-subtle)',
+      },
+      divideColor: {
+        default: 'var(--color-border-default)',
+        muted:   'var(--color-border-muted)',
+        subtle:  'var(--color-border-subtle)',
+      },
+      // Governs the bare `border`/`border-t`/`border-b`/`border-r`/`border-l` utilities
+      // app-wide (explicit widths like `border-2`/`border-l-4` are unaffected).
+      borderWidth: {
+        DEFAULT: '2px',
       },
       borderRadius: {
         DEFAULT: 'var(--radius-medium)',
