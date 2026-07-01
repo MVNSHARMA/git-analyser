@@ -4,7 +4,7 @@
     "builder": "RAILPACK"
   },
   "deploy": {
-    "startCommand": "npm run build && node dist/server.js",
+    "startCommand": "npm run build && node dist/config/migrate.js && node dist/server.js",
     "healthcheckPath": "/api/v1/health",
     "healthcheckTimeout": 120,
     "restartPolicyType": "ON_FAILURE",
