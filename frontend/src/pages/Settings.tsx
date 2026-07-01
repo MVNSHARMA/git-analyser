@@ -20,6 +20,7 @@ import Input from '../components/shared/Input';
 import Avatar from '../components/shared/Avatar';
 import Modal from '../components/shared/Modal';
 import Spinner from '../components/shared/Spinner';
+import ThemeToggle from '../components/shared/ThemeToggle';
 
 export function Settings() {
   const navigate = useNavigate();
@@ -97,43 +98,45 @@ export function Settings() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-[#111827] font-sans overflow-y-auto">
+    <div className="min-h-screen bg-canvas-default text-fg-default font-sans overflow-y-auto">
       <div className="max-w-4xl mx-auto px-6 py-12">
         {/* Header Back Link */}
         <div className="mb-8 flex items-center justify-between">
           <button
             onClick={() => navigate('/dashboard')}
-            className="inline-flex items-center text-xs font-black uppercase tracking-wider text-[#111827] hover:underline"
+            className="inline-flex items-center text-sm font-medium text-fg-default hover:underline"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Dashboard
           </button>
 
-          <div className="flex items-center gap-2 text-[#DD614C]">
-            <SettingsIcon className="w-4 h-4" />
-            <span className="text-xs uppercase font-black tracking-widest">Settings</span>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 text-accent-emphasis">
+              <SettingsIcon className="w-4 h-4" />
+              <span className="text-sm font-medium">Settings</span>
+            </div>
+            <ThemeToggle />
           </div>
         </div>
 
-        <h1 className="text-5xl font-black uppercase tracking-tight mb-8">User Settings</h1>
+        <h1 className="text-4xl font-bold tracking-tight mb-8">User Settings</h1>
 
-        <div className="space-y-10">
+        <div className="space-y-8">
           {/* Section 1: Profile Details */}
-          <section className="bg-white border-[3px] border-[#111827] p-6 brutal-hover">
-            <h2 className="text-2xl font-black uppercase tracking-wider mb-6 flex items-center gap-2 text-[#111827]">
-              <UserIcon className="w-6 h-6 text-[#DD614C]" />
+          <section className="bg-canvas-default border border-default rounded-lg p-6">
+            <h2 className="text-lg font-semibold mb-6 flex items-center gap-2 text-fg-default">
+              <UserIcon className="w-5 h-5 text-accent-emphasis" />
               Profile Information
             </h2>
 
-            {/* Thick divider */}
-            <div className="border-t-2 border-[#111827] mb-6" />
+            <div className="border-t border-default mb-6" />
 
             <form onSubmit={handleUpdateProfile} className="space-y-6">
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 pb-2">
-                <Avatar name={displayName} src={avatarUrl} size="lg" className="border-2 border-[#111827]" />
-                <div className="flex-1 w-full space-y-1 text-[#111827]">
-                  <h3 className="text-xs font-black uppercase tracking-widest">Profile Avatar</h3>
-                  <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider leading-normal">
+                <Avatar name={displayName} src={avatarUrl} size="lg" />
+                <div className="flex-1 w-full space-y-1 text-fg-default">
+                  <h3 className="text-sm font-medium">Profile Avatar</h3>
+                  <p className="text-xs text-fg-muted leading-normal">
                     Change your display name below or provide an image link to load a custom avatar.
                   </p>
                 </div>
@@ -164,7 +167,7 @@ export function Settings() {
                   variant="primary"
                   loading={updatingProfile}
                   disabled={updatingProfile}
-                  className="px-6 text-xs font-black tracking-widest h-11"
+                  className="px-6 text-sm h-10"
                 >
                   Save Profile
                 </Button>
@@ -173,19 +176,18 @@ export function Settings() {
           </section>
 
           {/* Section 2: Repos List */}
-          <section className="bg-white border-[3px] border-[#111827] p-6 brutal-hover">
-            <h2 className="text-2xl font-black uppercase tracking-wider mb-6 flex items-center gap-2 text-[#111827]">
-              <Trash2 className="w-6 h-6 text-[#DD614C]" />
+          <section className="bg-canvas-default border border-default rounded-lg p-6">
+            <h2 className="text-lg font-semibold mb-6 flex items-center gap-2 text-fg-default">
+              <Trash2 className="w-5 h-5 text-accent-emphasis" />
               Manage Repositories
             </h2>
 
-            {/* Thick divider */}
-            <div className="border-t-2 border-[#111827] mb-6" />
+            <div className="border-t border-default mb-6" />
 
             {isReposLoading ? (
               <div className="py-8 flex justify-center"><Spinner size="sm" /></div>
             ) : !repos || repos.length === 0 ? (
-              <p className="text-xs text-gray-500 font-bold uppercase tracking-wider py-4 text-center">
+              <p className="text-sm text-fg-muted py-4 text-center">
                 No connected repositories.
               </p>
             ) : (
@@ -193,23 +195,23 @@ export function Settings() {
                 {repos.map((repo: Repository) => (
                   <div
                     key={repo.id}
-                    className="p-4 bg-white border-2 border-[#111827] flex items-center justify-between gap-4 font-bold text-xs"
+                    className="p-4 bg-canvas-subtle border border-default rounded-md flex items-center justify-between gap-4 text-sm"
                   >
                     <div className="truncate">
                       <div className="flex items-center gap-2">
-                        <h4 className="text-xs font-black text-[#111827] uppercase tracking-wide truncate">
+                        <h4 className="text-sm font-medium text-fg-default truncate">
                           {repo.display_name}
                         </h4>
                         <a
                           href={`https://github.com/${repo.full_name}`}
                           target="_blank"
                           rel="noreferrer"
-                          className="text-gray-500 hover:text-[#DD614C] transition-colors"
+                          className="text-fg-muted hover:text-accent-emphasis transition-colors"
                         >
                           <ExternalLink className="w-3.5 h-3.5" />
                         </a>
                       </div>
-                      <p className="text-[10px] text-gray-500 truncate mt-1 font-mono">
+                      <p className="text-xs text-fg-muted truncate mt-1 font-mono">
                         ID: {repo.id}
                       </p>
                     </div>
@@ -223,7 +225,6 @@ export function Settings() {
                         }
                       }}
                       disabled={deleteRepoMutation.isPending}
-                      className="text-xs py-2 px-4 h-9 font-black"
                     >
                       Delete
                     </Button>
@@ -234,23 +235,22 @@ export function Settings() {
           </section>
 
           {/* Section 3: Danger Zone */}
-          <section className="border-[3px] border-[#DC2626] bg-white p-6 brutal-hover">
-            <h2 className="text-2xl font-black uppercase tracking-wider text-[#DC2626] mb-4 flex items-center gap-2">
-              <AlertTriangle className="w-6 h-6" />
+          <section className="border border-danger-fg rounded-lg bg-canvas-default p-6">
+            <h2 className="text-lg font-semibold text-danger-fg mb-4 flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5" />
               Danger Zone
             </h2>
 
-            {/* Thick divider */}
-            <div className="border-t-2 border-[#DC2626] mb-6" />
+            <div className="border-t border-danger-fg/30 mb-6" />
 
-            <p className="text-xs text-gray-600 mb-6 font-bold uppercase tracking-wider leading-relaxed">
+            <p className="text-sm text-fg-muted mb-6 leading-relaxed">
               Deletes your user account permanently. This soft deletes user records, revokes all active auth sessions, and clears all vector embeddings saved in Pinecone namespaces.
             </p>
             <Button
               variant="danger"
               size="md"
               onClick={() => setIsDeleteModalOpen(true)}
-              className="px-6 font-black tracking-widest h-11"
+              className="px-6"
             >
               Delete Account
             </Button>
@@ -261,11 +261,11 @@ export function Settings() {
       {/* Delete Confirmation Modal */}
       <Modal isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)} title="Confirm Account Deletion">
         <div className="flex flex-col gap-4 text-center">
-          <div className="p-3 bg-white border-2 border-[#111827] text-error w-fit mx-auto">
-            <AlertTriangle className="w-8 h-8 text-[#DC2626]" />
+          <div className="p-3 bg-danger-fg/10 rounded-full w-fit mx-auto">
+            <AlertTriangle className="w-8 h-8 text-danger-fg" />
           </div>
-          <h3 className="text-xl font-black uppercase tracking-wide text-[#111827]">Are you absolutely sure?</h3>
-          <p className="text-xs text-gray-600 leading-relaxed font-bold uppercase tracking-wider px-2">
+          <h3 className="text-lg font-semibold text-fg-default">Are you absolutely sure?</h3>
+          <p className="text-sm text-fg-muted leading-relaxed px-2">
             This action is irreversible. All your connected repositories, AI conversations history, indexing pipelines stats, and account settings data will be lost.
           </p>
 
@@ -274,7 +274,7 @@ export function Settings() {
               variant="ghost"
               onClick={() => setIsDeleteModalOpen(false)}
               disabled={deletingAccount}
-              className="h-10 text-xs px-4"
+              className="h-10 text-sm px-4"
             >
               Cancel
             </Button>
@@ -283,7 +283,7 @@ export function Settings() {
               onClick={handleDeleteAccount}
               loading={deletingAccount}
               disabled={deletingAccount}
-              className="h-10 text-xs px-4 font-black"
+              className="h-10 text-sm px-4"
             >
               Delete My Account
             </Button>

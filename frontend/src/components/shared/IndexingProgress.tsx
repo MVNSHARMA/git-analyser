@@ -18,7 +18,7 @@ export function IndexingProgress({ repoId, showDetails = true }: IndexingProgres
 
   if (currentStatus === 'never_indexed') {
     return (
-      <div className="text-xs text-surface-200">
+      <div className="text-xs text-fg-muted">
         Never indexed. Click reindex to begin.
       </div>
     );
@@ -50,32 +50,32 @@ export function IndexingProgress({ repoId, showDetails = true }: IndexingProgres
             {badgeText[currentStatus as keyof typeof badgeText] || currentStatus}
           </Badge>
           {currentStatus === 'indexing' && (
-            <span className="text-xs text-surface-200 font-medium tracking-wide animate-pulse capitalize">
+            <span className="text-xs text-fg-muted font-medium tracking-wide animate-pulse capitalize">
               Stage: {currentStage?.replace(/_/g, ' ')}
             </span>
           )}
         </div>
-        <span className="text-xs font-semibold text-brand-300">
+        <span className="text-xs font-semibold text-accent-emphasis">
           {currentProgress}%
         </span>
       </div>
 
       {/* Progress Bar Container */}
-      <div className="w-full h-1.5 bg-surface-900 rounded-full overflow-hidden border border-surface-border/20">
+      <div className="w-full h-1.5 bg-canvas-inset rounded-full overflow-hidden border border-border-default">
         <div
           className={`h-full transition-all duration-500 ease-out rounded-full ${
             currentStatus === 'failed'
-              ? 'bg-error'
+              ? 'bg-danger-emphasis'
               : currentStatus === 'ready' || currentStatus === 'completed'
-              ? 'bg-success'
-              : 'bg-brand-500 shadow-[0_0_8px_rgba(58,82,255,0.5)]'
+              ? 'bg-success-emphasis'
+              : 'bg-accent-emphasis'
           }`}
           style={{ width: `${currentProgress}%` }}
         />
       </div>
 
       {showDetails && currentStatus === 'indexing' && (
-        <div className="mt-2 text-[10px] text-text-secondary leading-normal">
+        <div className="mt-2 text-[10px] text-fg-muted leading-normal">
           Indexing repository metadata, git branches, commits history, lines changes, and vector embeddings in Pinecone...
         </div>
       )}

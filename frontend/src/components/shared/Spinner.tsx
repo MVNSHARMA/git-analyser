@@ -12,7 +12,7 @@ export function Spinner({ size = 'md', className = '' }: SpinnerProps) {
 
   return (
     <div
-      className={`rounded-full border-t-brand-500 border-surface-800 animate-spin ${sizeClasses[size]} ${className}`}
+      className={`rounded-full border-t-accent-emphasis border-canvas-default animate-spin ${sizeClasses[size]} ${className}`}
       style={{ borderStyle: 'solid', borderLeftColor: 'transparent', borderRightColor: 'transparent' }}
     />
   );

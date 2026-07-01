@@ -13,9 +13,9 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-surface-900 text-white">
+      <div className="flex flex-col items-center justify-center min-h-screen bg-canvas-default text-fg-default">
         <Spinner size="lg" />
-        <p className="mt-4 text-surface-200 text-sm font-medium animate-pulse">
+        <p className="mt-4 text-fg-muted text-sm font-medium animate-pulse">
           Restoring your session...
         </p>
       </div>

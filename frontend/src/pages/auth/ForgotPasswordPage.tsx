@@ -36,26 +36,23 @@ export function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-surface-900 text-white flex items-center justify-center p-6 relative overflow-hidden">
-      {/* Background glow */}
-      <div className="absolute w-[40%] h-[40%] rounded-full bg-brand-500/10 blur-[100px] pointer-events-none" />
-
-      <div className="w-full max-w-md bg-surface-800 border border-surface-border rounded-2xl shadow-xl overflow-hidden glass p-8 z-10 animate-fade-in">
+    <div className="min-h-screen bg-canvas-default text-fg-default flex items-center justify-center p-6">
+      <div className="w-full max-w-md bg-canvas-default border border-default rounded-lg shadow-elevation-medium overflow-hidden p-8 animate-fade-in">
         {/* Title */}
         <div className="flex flex-col items-center mb-8">
-          <div className="p-3 bg-brand-500/10 border border-brand-500/20 text-brand-400 rounded-2xl w-fit mb-4">
+          <div className="p-3 bg-accent-subtle text-accent-emphasis rounded-lg w-fit mb-4">
             <KeyRound className="w-8 h-8" />
           </div>
-          <h2 className="text-2xl font-bold tracking-wide">Recover Password</h2>
-          <p className="text-xs text-surface-200 mt-1 font-light text-center">
+          <h2 className="text-2xl font-semibold">Recover Password</h2>
+          <p className="text-xs text-fg-muted mt-1 text-center">
             Enter your email to receive a password reset link
           </p>
         </div>
 
         {success ? (
           <div className="text-center animate-fade-in">
-            <p className="text-sm text-surface-200 leading-relaxed font-light mb-6">
-              If an account is associated with <span className="font-semibold text-white">{email}</span>, 
+            <p className="text-sm text-fg-muted leading-relaxed mb-6">
+              If an account is associated with <span className="font-semibold text-fg-default">{email}</span>,
               you will receive a link to reset your password shortly.
             </p>
             <Link to="/login">
@@ -81,7 +78,7 @@ export function ForgotPasswordPage() {
               Send Reset Link
             </Button>
 
-            <Link to="/login" className="block text-center mt-2 text-xs text-surface-200 hover:text-white transition-colors font-medium">
+            <Link to="/login" className="block text-center mt-2 text-xs text-fg-muted hover:text-fg-default transition-colors font-medium">
               Cancel and go back
             </Link>
           </form>

@@ -32,11 +32,11 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
       />
 
       {/* Modal Dialog */}
-      <div className="relative w-full max-w-md bg-white border-[3px] border-[#111827] rounded-none shadow-none overflow-hidden animate-fade-in z-10 p-0">
+      <div className="relative w-full max-w-md bg-canvas-default border border-default rounded-lg shadow-elevation-large overflow-hidden animate-fade-in z-10 p-0">
         {/* Header */}
-        <div className="flex items-center justify-between p-5 border-b-[3px] border-[#111827] bg-[#fdfdfd]">
+        <div className="flex items-center justify-between p-5 border-b border-default bg-canvas-subtle">
           {title ? (
-            <h3 className="text-base font-black text-[#111827] uppercase tracking-wider">
+            <h3 className="text-base font-semibold text-fg-default">
               {title}
             </h3>
           ) : (
@@ -44,14 +44,14 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
           )}
           <button
             onClick={onClose}
-            className="text-[#111827] hover:bg-gray-100 border-2 border-[#111827] p-1.5 transition-colors brutal-hover"
+            className="text-fg-muted hover:text-fg-default hover:bg-canvas-default border border-default rounded-md p-1.5 surface-hover"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Content */}
-        <div className="p-6 bg-white text-[#111827]">{children}</div>
+        <div className="p-6 bg-canvas-default text-fg-default">{children}</div>
       </div>
     </div>
   );

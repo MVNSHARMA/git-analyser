@@ -4,36 +4,60 @@ export default {
   theme: {
     extend: {
       colors: {
-        brand: {
-          50:  '#fff5f2',
-          100: '#ffe5dd',
-          200: '#ffcfc4',
-          300: '#ffa796',
-          400: '#ff745c',
-          500: '#DD614C',   // primary terracotta red
-          600: '#c54d39',
-          700: '#a53d2c',
-          800: '#893325',
-          900: '#722e23',
-          950: '#3f150f',
+        canvas: {
+          default: 'var(--color-canvas-default)',
+          subtle:  'var(--color-canvas-subtle)',
+          inset:   'var(--color-canvas-inset)',
         },
-        secondary: '#DAA144',
-        ink: '#111827',
-        surface: {
-          DEFAULT: '#FFFFFF',
-          50:  '#F9FAFB',
-          100: '#F3F4F6',
-          200: '#E5E7EB',
-          800: '#FFFFFF',
-          900: '#FFFFFF',
+        fg: {
+          default: 'var(--color-fg-default)',
+          muted:   'var(--color-fg-muted)',
+          subtle:  'var(--color-fg-subtle)',
+          onEmphasis: 'var(--color-fg-on-emphasis)',
         },
-        error: '#DC2626',
-        success: '#16A34A',
-        warning: '#D97706',
+        border: {
+          default: 'var(--color-border-default)',
+          muted:   'var(--color-border-muted)',
+          subtle:  'var(--color-border-subtle)',
+        },
+        neutral: {
+          50:  'var(--color-neutral-50)',
+          100: 'var(--color-neutral-100)',
+          200: 'var(--color-neutral-200)',
+          300: 'var(--color-neutral-300)',
+          400: 'var(--color-neutral-400)',
+          500: 'var(--color-neutral-500)',
+          600: 'var(--color-neutral-600)',
+          700: 'var(--color-neutral-700)',
+          800: 'var(--color-neutral-800)',
+          900: 'var(--color-neutral-900)',
+        },
+        success: { fg: 'var(--color-success-fg)', emphasis: 'var(--color-success-emphasis)' },
+        attention: { fg: 'var(--color-attention-fg)', emphasis: 'var(--color-attention-emphasis)' },
+        danger: { fg: 'var(--color-danger-fg)', emphasis: 'var(--color-danger-emphasis)' },
+        accent: {
+          emphasis: 'var(--color-accent-emphasis)',
+          hover:    'var(--color-accent-emphasis-hover)',
+          subtle:   'var(--color-accent-subtle)',
+        },
+      },
+      borderRadius: {
+        DEFAULT: 'var(--radius-medium)',
+        small: 'var(--radius-small)',
+        medium: 'var(--radius-medium)',
+        large: 'var(--radius-large)',
+      },
+      boxShadow: {
+        'elevation-small':  'var(--shadow-small)',
+        'elevation-medium': 'var(--shadow-medium)',
+        'elevation-large':  'var(--shadow-large)',
       },
       fontFamily: {
-        sans:  ["'Darker Grotesque'", 'sans-serif'],
-        mono:  ["'JetBrains Mono'", 'monospace'],
+        sans: [
+          '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Noto Sans',
+          'Helvetica', 'Arial', 'sans-serif', '"Apple Color Emoji"', '"Segoe UI Emoji"',
+        ],
+        mono: ['"IBM Plex Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
       animation: {
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
