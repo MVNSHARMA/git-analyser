@@ -24,8 +24,8 @@ export default function CallbackPage() {
   }, []);
 
   return (
-    <div style={{display:'flex',alignItems:'center',justifyContent:'center',height:'100vh'}}>
-      <p style={{fontFamily:'Arial',fontSize:18}}>Signing you in...</p>
+    <div className="min-h-screen bg-canvas-default text-fg-default flex items-center justify-center">
+      <p className="text-lg font-medium">Signing you in...</p>
     </div>
   );
 }

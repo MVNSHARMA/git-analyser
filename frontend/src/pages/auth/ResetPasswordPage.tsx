@@ -53,24 +53,21 @@ export function ResetPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-surface-900 text-white flex items-center justify-center p-6 relative overflow-hidden">
-      {/* Background glow */}
-      <div className="absolute w-[40%] h-[40%] rounded-full bg-brand-500/10 blur-[100px] pointer-events-none" />
-
-      <div className="w-full max-w-md bg-surface-800 border border-surface-border rounded-2xl shadow-xl overflow-hidden glass p-8 z-10 animate-fade-in">
+    <div className="min-h-screen bg-canvas-default text-fg-default flex items-center justify-center p-6">
+      <div className="w-full max-w-md bg-canvas-default border border-muted rounded-lg shadow-elevation-medium overflow-hidden p-8 animate-fade-in">
         {/* Title */}
         <div className="flex flex-col items-center mb-8">
-          <div className="p-3 bg-brand-500/10 border border-brand-500/20 text-brand-400 rounded-2xl w-fit mb-4">
+          <div className="p-3 bg-accent-subtle text-accent-emphasis rounded-lg w-fit mb-4">
             <KeyRound className="w-8 h-8" />
           </div>
-          <h2 className="text-2xl font-bold tracking-wide">Set New Password</h2>
-          <p className="text-xs text-surface-200 mt-1 font-light text-center">
+          <h2 className="text-2xl font-semibold">Set New Password</h2>
+          <p className="text-xs text-fg-muted mt-1 text-center">
             Create a secure new password for your account
           </p>
         </div>
 
         {!token ? (
-          <div className="text-center text-error text-xs font-semibold py-4">
+          <div className="text-center text-danger-fg text-xs font-semibold py-4">
             Error: Reset token is missing. Please initiate recovery again.
           </div>
         ) : (

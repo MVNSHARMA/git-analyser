@@ -6,6 +6,7 @@ import authService from '../../services/auth.service';
 import { useAuthStore } from '../../stores/authStore';
 import Input from '../../components/shared/Input';
 import Button from '../../components/shared/Button';
+import ThemeToggle from '../../components/shared/ThemeToggle';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || 
   (typeof window !== 'undefined' && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1')
@@ -69,18 +70,22 @@ export function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-[#111827] flex items-center justify-center p-6 relative">
-      {/* Thick accent bar at top */}
-      <div className="absolute top-0 left-0 right-0 h-1.5 bg-[#DD614C] z-20" />
+    <div className="min-h-screen bg-canvas-default text-fg-default flex items-center justify-center p-6 relative">
+      {/* Thin accent bar at top */}
+      <div className="absolute top-0 left-0 right-0 h-1 bg-accent-emphasis z-20" />
 
-      <div className="w-full max-w-md bg-white border-[3px] border-[#111827] p-8 z-10 text-[#111827]">
+      <div className="absolute top-6 right-6 z-20">
+        <ThemeToggle />
+      </div>
+
+      <div className="w-full max-w-md bg-canvas-default border border-muted rounded-lg shadow-elevation-medium p-8 z-10 text-fg-default">
         {/* Title */}
         <div className="flex flex-col items-center mb-8">
-          <div className="p-3 bg-white border-2 border-[#111827] text-[#111827] rounded-none w-fit mb-4">
-            <Terminal className="w-8 h-8 text-[#DD614C]" />
+          <div className="p-3 bg-canvas-subtle border border-muted rounded-lg text-accent-emphasis w-fit mb-4">
+            <Terminal className="w-8 h-8" />
           </div>
-          <h2 className="text-4xl font-black uppercase tracking-wide text-[#111827]">Sign In</h2>
-          <p className="text-xs text-gray-500 uppercase tracking-widest mt-1.5 font-bold">
+          <h2 className="text-3xl font-semibold text-fg-default">Sign In</h2>
+          <p className="text-sm text-fg-muted mt-1.5">
             Sign in to access your Git Analyser dashboard
           </p>
         </div>
@@ -100,12 +105,12 @@ export function LoginPage() {
 
           <div className="flex flex-col">
             <div className="flex items-center justify-between mb-2">
-              <label className="text-sm font-black text-[#111827] uppercase tracking-widest">
+              <label className="text-sm font-medium text-fg-default">
                 Password
               </label>
               <Link
                 to="/forgot-password"
-                className="text-xs text-[#DD614C] hover:underline transition-colors font-bold uppercase tracking-wider"
+                className="text-xs text-accent-emphasis hover:underline transition-colors font-medium"
               >
                 Forgot?
               </Link>
@@ -115,26 +120,26 @@ export function LoginPage() {
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className={`w-full px-4 py-2.5 bg-white border-2 border-[#111827] text-[#111827] placeholder-gray-500 focus:outline-none focus:border-[3px] focus:border-[#DD614C] transition-all`}
+              className="w-full px-4 py-2.5 bg-canvas-default border border-muted rounded-md text-fg-default placeholder-fg-subtle focus:outline-none focus:border-accent-emphasis focus:ring-1 focus:ring-accent-emphasis transition-colors"
               disabled={loading}
               required
             />
             {errors.password && (
-              <span className="text-xs text-error font-extrabold mt-1.5 animate-fade-in">
+              <span className="text-xs text-danger-fg font-medium mt-1.5 animate-fade-in">
                 {errors.password}
               </span>
             )}
           </div>
 
-          <Button type="submit" variant="primary" loading={loading} className="w-full mt-4 h-12 text-sm font-black tracking-widest">
+          <Button type="submit" variant="primary" loading={loading} className="w-full mt-4 h-11 text-sm font-semibold">
             Sign In
           </Button>
         </form>
 
         {/* Separator */}
         <div className="relative flex items-center justify-center my-6">
-          <div className="w-full border-t-2 border-[#111827]" />
-          <span className="absolute bg-white px-4 text-xs uppercase font-black text-[#111827] tracking-widest">
+          <div className="w-full border-t border-muted" />
+          <span className="absolute bg-canvas-default px-4 text-xs font-medium text-fg-muted">
             Or
           </span>
         </div>
@@ -145,18 +150,18 @@ export function LoginPage() {
           variant="secondary"
           onClick={handleGithubLogin}
           disabled={loading}
-          className="w-full h-12 text-sm font-black tracking-widest bg-white"
+          className="w-full h-11 text-sm font-semibold"
         >
-          <Github className="w-5 h-5 mr-3 text-[#111827]" />
+          <Github className="w-5 h-5 mr-3" />
           Continue with GitHub
         </Button>
 
         {/* Redirect Link */}
-        <p className="text-xs text-gray-600 text-center mt-8 font-bold uppercase tracking-wide">
+        <p className="text-sm text-fg-muted text-center mt-8">
           Don&apos;t have an account?{' '}
           <Link
             to="/signup"
-            className="text-[#DD614C] hover:underline font-black transition-colors"
+            className="text-accent-emphasis hover:underline font-semibold transition-colors"
           >
             Create an account
           </Link>

@@ -5,6 +5,7 @@ import { Terminal, Github, Mail } from 'lucide-react';
 import authService from '../../services/auth.service';
 import Input from '../../components/shared/Input';
 import Button from '../../components/shared/Button';
+import ThemeToggle from '../../components/shared/ThemeToggle';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || 
   (typeof window !== 'undefined' && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1')
@@ -64,19 +65,22 @@ export function SignupPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-white text-[#111827] flex items-center justify-center p-6 relative">
-        <div className="absolute top-0 left-0 right-0 h-1.5 bg-[#DAA144] z-20" />
-        <div className="w-full max-w-md bg-white border-[3px] border-[#111827] p-8 z-10 text-center animate-fade-in">
-          <div className="p-4 bg-white border-2 border-[#111827] w-fit mx-auto mb-6">
-            <Mail className="w-10 h-10 text-[#DAA144] animate-bounce" />
+      <div className="min-h-screen bg-canvas-default text-fg-default flex items-center justify-center p-6 relative">
+        <div className="absolute top-0 left-0 right-0 h-1 bg-accent-emphasis z-20" />
+        <div className="absolute top-6 right-6 z-20">
+          <ThemeToggle />
+        </div>
+        <div className="w-full max-w-md bg-canvas-default border border-muted rounded-lg shadow-elevation-medium p-8 z-10 text-center animate-fade-in">
+          <div className="p-4 bg-canvas-subtle border border-muted rounded-lg w-fit mx-auto mb-6">
+            <Mail className="w-10 h-10 text-accent-emphasis animate-bounce" />
           </div>
-          <h2 className="text-3xl font-black uppercase tracking-wide">Check Your Email</h2>
-          <p className="text-sm text-gray-700 mt-4 leading-relaxed font-light">
-            We have sent a verification link to <span className="font-extrabold text-[#111827]">{email}</span>.
+          <h2 className="text-2xl font-semibold">Check Your Email</h2>
+          <p className="text-sm text-fg-muted mt-4 leading-relaxed">
+            We have sent a verification link to <span className="font-semibold text-fg-default">{email}</span>.
             Please verify your email address to complete your registration.
           </p>
           <Link to="/login" className="block mt-8">
-            <Button variant="primary" className="w-full h-12 text-sm font-black tracking-widest">
+            <Button variant="primary" className="w-full h-11 text-sm font-semibold">
               Return to Login
             </Button>
           </Link>
@@ -86,18 +90,22 @@ export function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white text-[#111827] flex items-center justify-center p-6 relative">
-      {/* Thick accent bar at top */}
-      <div className="absolute top-0 left-0 right-0 h-1.5 bg-[#DAA144] z-20" />
+    <div className="min-h-screen bg-canvas-default text-fg-default flex items-center justify-center p-6 relative">
+      {/* Thin accent bar at top */}
+      <div className="absolute top-0 left-0 right-0 h-1 bg-accent-emphasis z-20" />
 
-      <div className="w-full max-w-md bg-white border-[3px] border-[#111827] p-8 z-10 text-[#111827]">
+      <div className="absolute top-6 right-6 z-20">
+        <ThemeToggle />
+      </div>
+
+      <div className="w-full max-w-md bg-canvas-default border border-muted rounded-lg shadow-elevation-medium p-8 z-10 text-fg-default">
         {/* Title */}
         <div className="flex flex-col items-center mb-8">
-          <div className="p-3 bg-white border-2 border-[#111827] text-[#111827] rounded-none w-fit mb-4">
-            <Terminal className="w-8 h-8 text-[#DAA144]" />
+          <div className="p-3 bg-canvas-subtle border border-muted rounded-lg text-accent-emphasis w-fit mb-4">
+            <Terminal className="w-8 h-8" />
           </div>
-          <h2 className="text-4xl font-black uppercase tracking-wide text-[#111827]">Create Account</h2>
-          <p className="text-xs text-gray-500 uppercase tracking-widest mt-1.5 font-bold">
+          <h2 className="text-3xl font-semibold text-fg-default">Create Account</h2>
+          <p className="text-sm text-fg-muted mt-1.5">
             Sign up to get started with Git Analyser
           </p>
         </div>
@@ -136,15 +144,15 @@ export function SignupPage() {
             required
           />
 
-          <Button type="submit" variant="primary" loading={loading} className="w-full mt-4 h-12 text-sm font-black tracking-widest">
+          <Button type="submit" variant="primary" loading={loading} className="w-full mt-4 h-11 text-sm font-semibold">
             Create Account
           </Button>
         </form>
 
         {/* Separator */}
         <div className="relative flex items-center justify-center my-6">
-          <div className="w-full border-t-2 border-[#111827]" />
-          <span className="absolute bg-white px-4 text-xs uppercase font-black text-[#111827] tracking-widest">
+          <div className="w-full border-t border-muted" />
+          <span className="absolute bg-canvas-default px-4 text-xs font-medium text-fg-muted">
             Or
           </span>
         </div>
@@ -155,18 +163,18 @@ export function SignupPage() {
           variant="secondary"
           onClick={handleGithubLogin}
           disabled={loading}
-          className="w-full h-12 text-sm font-black tracking-widest bg-white"
+          className="w-full h-11 text-sm font-semibold"
         >
-          <Github className="w-5 h-5 mr-3 text-[#111827]" />
+          <Github className="w-5 h-5 mr-3" />
           Sign up with GitHub
         </Button>
 
         {/* Redirect Link */}
-        <p className="text-xs text-gray-600 text-center mt-8 font-bold uppercase tracking-wide">
+        <p className="text-sm text-fg-muted text-center mt-8">
           Already have an account?{' '}
           <Link
             to="/login"
-            className="text-[#DAA144] hover:underline font-black transition-colors"
+            className="text-accent-emphasis hover:underline font-semibold transition-colors"
           >
             Sign in
           </Link>
