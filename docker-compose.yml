@@ -48,7 +48,7 @@ services:
         condition: service_healthy
     volumes:
       - ./backend:/app
-    command: ts-node src/server.ts
+    command: sh -c "npx ts-node src/config/migrate.ts && npx ts-node src/server.ts"
 
   frontend:
     build:

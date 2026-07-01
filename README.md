@@ -41,7 +41,7 @@ git clone https://github.com/yourorg/git-analyser.git
 cd git-analyser
 
 # Backend env
-cp .env.example backend/.env
+cp backend/.env.example backend/.env
 # → Fill in all values in backend/.env
 
 # Frontend env
