@@ -4,7 +4,7 @@
     "builder": "RAILPACK"
   },
   "deploy": {
-    "startCommand": "npm run build && npm run railway:start",
+    "startCommand": "npm run railway:start",
     "healthcheckPath": "/api/v1/health",
     "healthcheckTimeout": 120,
     "restartPolicyType": "ON_FAILURE",
