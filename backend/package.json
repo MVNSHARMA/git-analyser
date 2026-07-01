@@ -13,6 +13,8 @@
     "migrate": "ts-node src/config/migrate.ts",
     "seed": "ts-node src/seed.ts",
     "worker": "node -r dotenv/config dist/jobs/queue-worker.js",
+    "railway:start": "node dist/config/migrate.js && node dist/server.js",
+    "railway:worker": "node dist/jobs/queue-worker.js",
     "test": "jest --runInBand --forceExit",
     "test:watch": "jest --watch",
     "lint": "eslint src --ext .ts"
